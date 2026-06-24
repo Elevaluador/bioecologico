@@ -1,0 +1,176 @@
+<style>
+/* Estilos básicos para el banner y el panel de configuración */
+ #consent-banner, #consent-config {
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    background: var(--secundario-marron);
+    border: 1px solid #ccc;
+    padding: 15px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    z-index: 1000;
+    max-width: 300px;
+    font-family: Arial, sans-serif;
+  }
+  #consent-banner button, #consent-config button {
+    margin: 5px 5px 0 0;
+    padding: 8px 12px;
+    border: none;
+    background:var(--secundario-amarillo);
+    color: rgb(0, 0, 0);
+    cursor: pointer;
+  }
+  #consent-banner button:hover, #consent-config button:hover {
+    background: var(--primario-morado);
+    color:var(--blanco)
+  }
+  #consent-config {
+    display: none;
+  }
+  label {
+    display: block;
+    margin-top: 10px;
+  }
+</style>
+
+<!-- Banner de consentimiento -->
+<div id="consent-banner" style="display: none;">
+  <p style="color:var(--blanco)">
+    Usamos cookies para análisis estadístico y publicidad. ¿Cómo deseas continuar?
+  </p>
+  <p style="margin-top:1rem; font-size:0.85rem; opacity:0.8;">
+    <a style="color:var(--blanco);"<HeaderLink href=/politica-cookies>Política de Cookies</HeaderLink></a> &nbsp;|&nbsp;
+    <a style="color:var(--blanco);"<HeaderLink href=/politica-privacidad>Política de Privacidad</HeaderLink></a> &nbsp;|&nbsp;
+    
+
+  </p>
+  <button type="button" data-action="aceptar-todo">Aceptar</button>
+  <button type="button" data-action="rechazar-todo">Rechazar</button>
+  <button type="button" data-action="mostrar-config">Configurar</button>
+</div>
+
+<!-- Panel de configuración personalizada -->
+<div id="consent-config" style="display: none; color:var(--blanco)">
+  <p><strong>Configuración de consentimiento</strong></p>
+  <label>
+    <input type="checkbox" id="consent-estadistica" checked>
+    Aprobar Cookies estadísticas
+  </label>
+  <label>
+    <input type="checkbox" id="consent-comportamental" checked>
+    Aprobar Cookies comportamentales
+  </label>
+  <button type="button" data-action="guardar-config">Guardar configuración</button>
+</div>
+
+<script>
+
+// ============ TIPOS ============
+
+interface ConsentConfig {
+  analytics_storage: boolean;
+  ad_storage: boolean;
+}
+
+// ============ HELPERS ============
+
+function getElement(id: string): HTMLElement {
+  const el = document.getElementById(id);
+  if (!el) throw new Error(`Elemento #${id} no encontrado`);
+  return el;
+}
+
+function getInput(id: string): HTMLInputElement {
+  const el = getElement(id);
+  if (!(el instanceof HTMLInputElement)) throw new Error(`#${id} no es un input`);
+  return el;
+}
+
+// ============ FUNCIONES ============
+
+function aplicarConsentimiento(estadistica: boolean, comportamental: boolean): void {
+  if (typeof window.gtag === 'function') {
+    window.gtag('consent', 'update', {
+      'analytics_storage': estadistica ? 'granted' : 'denied',
+      'ad_storage': comportamental ? 'granted' : 'denied'
+    });
+  }
+  guardarConsentimiento(estadistica, comportamental);
+}
+
+function guardarConsentimiento(estadistica: boolean, comportamental: boolean): void {
+  localStorage.setItem('consentConfig', JSON.stringify({
+    analytics_storage: estadistica,
+    ad_storage: comportamental
+  }));
+}
+
+function obtenerConsentimientoGuardado(): ConsentConfig | null {
+  const consent = localStorage.getItem('consentConfig');
+  return consent ? JSON.parse(consent) as ConsentConfig : null;
+}
+
+function ocultarBanner(): void {
+  getElement('consent-banner').style.display = 'none';
+  getElement('consent-config').style.display = 'none';
+}
+
+function mostrarBanner(): void {
+  getElement('consent-banner').style.display = 'block';
+}
+
+function mostrarConfiguracion(): void {
+  getElement('consent-config').style.display = 'block';
+}
+
+function gestionarConsentimiento(estadistica: boolean, comportamental: boolean): void {
+  aplicarConsentimiento(estadistica, comportamental);
+  ocultarBanner();
+}
+
+// ============ EVENT LISTENERS ============
+
+document.addEventListener('DOMContentLoaded', () => {
+  const banner = getElement('consent-banner');
+  const configPanel = getElement('consent-config');
+
+  // Event delegation para todos los botones del banner
+  banner.addEventListener('click', (e: MouseEvent) => {
+    const btn = (e.target as HTMLElement).closest('button');
+    if (!btn) return;
+
+    const action = btn.dataset.action;
+
+    switch (action) {
+      case 'aceptar-todo':
+        gestionarConsentimiento(true, true);
+        break;
+      case 'rechazar-todo':
+        gestionarConsentimiento(false, false);
+        break;
+      case 'mostrar-config':
+        mostrarConfiguracion();
+        break;
+    }
+  });
+
+  // Guardar configuración personalizada
+  configPanel.addEventListener('click', (e: MouseEvent) => {
+    const btn = (e.target as HTMLElement).closest('button');
+    if (!btn || btn.dataset.action !== 'guardar-config') return;
+
+    const estadistica = getInput('consent-estadistica').checked;
+    const comportamental = getInput('consent-comportamental').checked;
+    gestionarConsentimiento(estadistica, comportamental);
+  });
+
+  // Verificar consentimiento guardado al cargar
+  const saved = obtenerConsentimientoGuardado();
+  if (saved) {
+    aplicarConsentimiento(saved.analytics_storage, saved.ad_storage);
+    ocultarBanner();
+  } else {
+    mostrarBanner();
+  }
+});
+</script>

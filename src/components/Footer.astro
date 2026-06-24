@@ -1,0 +1,34 @@
+---
+const today = new Date();
+---
+ <footer id="footer">
+        <p>&copy; {today.getFullYear()} Bioecológico AgTech - Innovación Agrícola para Sullana, Piura.</p>
+        <p> <a href="https://wa.me/51918005466" target="_blank">📞 +51 918 005 466 </a>| ✉️ <a href="mailto:bioecologicoeirl@gmail.com">bioecologicoeirl@gmail.com</a></p>
+    </footer>
+
+
+<style>
+	/* Footer */
+        footer {
+            background: var(--primario-verde);
+            color: white;
+            text-align: center;
+            padding: 2rem;
+        }
+        footer a {
+            color: #d4f5d4;
+            text-decoration: none;
+        }
+        footer a:hover {
+            text-decoration: underline;
+        }
+		
+
+@media (min-width: 1024px) {
+    .footer {
+        padding-top: 4rem;
+        padding-bottom: 2rem;
+    }
+}
+
+</style>

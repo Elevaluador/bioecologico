@@ -1,0 +1,196 @@
+---
+import BaseHead from '../components/BaseHead.astro';
+import Footer from '../components/Footer.astro';
+import Header from '../components/Header.astro';
+import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
+export const prerender = true;
+---
+
+<!doctype html>
+<html lang="es">
+	<head>
+		<BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
+	<!-- Cargar Supabase SDK antes que cualquier otro script -->
+<body>
+	<style>
+    
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+      
+        @media (max-width: 768px) { body { padding-top: 120px; } }
+        @media (max-width: 600px) { body { padding-top: 10px; } }
+
+        /* HERO */
+        .page-hero { background: var(--primario-morado); padding: 10rem 2rem; color: var(--blanco); text-align: center; }
+        .page-hero h1 { font-size: 2.8rem; font-weight: 800; margin-bottom: 1rem; }
+        .page-hero p { font-size: 1.1rem; opacity: 0.9; max-width: 600px; margin: 0 auto; }
+        .breadcrumb { font-size: 0.9rem; margin-bottom: 1rem; opacity: 0.75; }
+        .breadcrumb a { color: var(--secundario-amarillo); text-decoration: none; }
+
+        /* CONTENIDO */
+        .page-content { max-width: 900px; margin: 0 auto; padding: 3rem 2rem; }
+        .section-block { background: white; border-radius: 15px; padding: 2rem; margin-bottom: 2rem; box-shadow: 0 5px 20px rgba(0,0,0,0.07); border-left: 5px solid var(--primario-morado); }
+        .section-block h2 { color: var(--primario-verde); font-size: 1.5rem; margin-bottom: 1rem; font-weight: 700; }
+        .section-block h3 { color: var(--primario-morado); font-size: 1.1rem; margin: 1.2rem 0 0.5rem; }
+        .section-block p { color: #555; line-height: 1.8; margin-bottom: 0.8rem; }
+        .section-block ul, .section-block ol { padding-left: 1.5rem; color: #555; line-height: 1.9; }
+        .section-block li { margin-bottom: 0.4rem; }
+
+        .highlight-box { background: var(--secundario-marron); border-radius: 10px; padding: 1.5rem; margin: 1rem 0; border: 1px solid #c8e6c9; }
+        .highlight-box p { color:var(--blanco); margin: 0; }
+
+        .rights-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin: 1rem 0; }
+        .right-item { background: var(--fondo-claro); padding: 1rem; border-radius: 10px; border-top: 3px solid var(--primario-morado); text-align: center; }
+        .right-item .right-icon { font-size: 2rem; margin-bottom: 0.5rem; }
+        .right-item h4 { color: var(--primario-morado); font-size: 0.95rem; margin-bottom: 0.3rem; }
+        .right-item p { color: #666; font-size: 0.85rem; margin: 0; }
+
+        .last-update { background: #fff8e1; border-left: 4px solid var(--secundario-amarillo); padding: 1rem 1.5rem; border-radius: 8px; font-size: 0.9rem; color: #555; margin-bottom: 2rem; }
+    </style>
+</body>
+		<Header />
+	<main>
+	<!-- HERO -->
+<section class="page-hero">
+    <p class="breadcrumb"><a <HeaderLink href="/">Inicio</HeaderLink></a> › Política de Privacidad</p>
+    <h1>🔒 Política de Privacidad</h1>
+    <p>Nos tomamos muy en serio la protección de tus datos personales. Aquí te explicamos cómo los usamos y protegemos.</p>
+</section>
+
+<div class="page-content">
+
+    <div class="last-update">
+        📅 <strong>Última actualización:</strong> Junio 2026 &nbsp;|&nbsp; Responsable: Bioecológico AgTech E.I.R.L. — Sullana, Piura, Perú.
+    </div>
+
+    <div class="section-block">
+        <h2>👤 ¿Quién es el Responsable de tus Datos?</h2>
+        <p><strong>Razón social:</strong> Bioecológico AgTech E.I.R.L.</p>
+        <p><strong>Actividad:</strong> Producción y comercialización de biofertilizantes orgánicos para la agricultura.</p>
+        <p><strong>Dirección:</strong> Sullana, Piura, Perú.</p>
+        <p><strong>Contacto:</strong> bioecologicoeirl@gmail.com | +51 918 005 466</p>
+    </div>
+
+    <div class="section-block">
+        <h2>📋 ¿Qué Datos Recopilamos?</h2>
+        <p>A través del formulario de diagnóstico agronómico de nuestro sitio web, recopilamos la siguiente información:</p>
+        <h3>Datos de identificación:</h3>
+        <ul>
+            <li>Nombre completo</li>
+            <li>Número de teléfono / WhatsApp</li>
+        </ul>
+        <h3>Datos agronómicos:</h3>
+        <ul>
+            <li>Ubicación del terreno (distrito y provincia)</li>
+            <li>Tipo de cultivo principal</li>
+            <li>Hectáreas cultivadas</li>
+            <li>Años de experiencia en el cultivo</li>
+            <li>Problemas identificados en el terreno</li>
+            <li>Fertilizante actualmente utilizado</li>
+            <li>Gasto mensual aproximado en fertilizantes</li>
+        </ul>
+        <h3>Datos de interés:</h3>
+        <ul>
+            <li>Tipo de servicio requerido (asesoría, cotización, visita técnica)</li>
+            <li>Comentarios adicionales (opcional)</li>
+        </ul>
+    </div>
+
+    <div class="section-block">
+        <h2>🎯 ¿Para qué Usamos tus Datos?</h2>
+        <div class="highlight-box">
+            <p>📌 <strong>Tus datos son usados exclusivamente para brindarte el servicio que solicitas.</strong> No los vendemos ni los compartimos con terceros con fines comerciales.</p>
+        </div>
+        <p>Las finalidades específicas son:</p>
+        <ul>
+            <li>Generar tu diagnóstico agronómico personalizado.</li>
+            <li>Contactarte para brindarte asesoría técnica especializada.</li>
+            <li>Enviarte cotizaciones o coordinar visitas técnicas a tu campo.</li>
+            <li>Mejorar nuestros productos y servicios con base en las necesidades reales de los agricultores.</li>
+            <li>Cumplir con obligaciones legales y contractuales aplicables en Perú.</li>
+        </ul>
+    </div>
+
+    <div class="section-block">
+        <h2>🔐 ¿Cómo Protegemos tus Datos?</h2>
+        <p>Implementamos medidas técnicas y organizativas para proteger tu información:</p>
+        <ul>
+            <li>Almacenamiento seguro en <strong>Supabase</strong>, plataforma con cifrado SSL/TLS.</li>
+            <li>Acceso restringido únicamente al equipo técnico de Bioecológico AgTech.</li>
+            <li>No compartimos datos con terceros salvo obligación legal.</li>
+            <li>Respaldo local cifrado en tu propio navegador (localStorage).</li>
+        </ul>
+    </div>
+
+    <div class="section-block">
+        <h2>⏱️ ¿Por cuánto Tiempo Conservamos tus Datos?</h2>
+        <p>Conservamos tu información por el tiempo necesario para prestarte el servicio solicitado y cumplir con las obligaciones legales:</p>
+        <ul>
+            <li><strong>Datos del formulario de diagnóstico:</strong> Hasta 2 años desde el último contacto.</li>
+            <li><strong>Datos de comunicaciones por WhatsApp/email:</strong> Hasta 3 años.</li>
+            <li><strong>Datos contables y de facturación:</strong> Según lo exige la legislación peruana (mínimo 5 años).</li>
+        </ul>
+        <p>Transcurridos estos plazos, procederemos a la eliminación o anonimización de tus datos.</p>
+    </div>
+
+    <div class="section-block">
+        <h2>✅ Tus Derechos sobre tus Datos</h2>
+        <p>De acuerdo con la Ley N° 29733 - Ley de Protección de Datos Personales del Perú, tienes los siguientes derechos:</p>
+        <div class="rights-grid">
+            <div class="right-item">
+                <div class="right-icon">👁️</div>
+                <h4>Acceso</h4>
+                <p>Saber qué datos tenemos sobre ti</p>
+            </div>
+            <div class="right-item">
+                <div class="right-icon">✏️</div>
+                <h4>Rectificación</h4>
+                <p>Corregir datos incorrectos</p>
+            </div>
+            <div class="right-item">
+                <div class="right-icon">🗑️</div>
+                <h4>Cancelación</h4>
+                <p>Solicitar la eliminación de tus datos</p>
+            </div>
+            <div class="right-item">
+                <div class="right-icon">🚫</div>
+                <h4>Oposición</h4>
+                <p>Oponerte al tratamiento de tus datos</p>
+            </div>
+        </div>
+        <p style="margin-top:1rem;">Para ejercer cualquiera de estos derechos, escríbenos a: <a href="mailto:bioecologicoeirl@gmail.com" style="color:var(--primario-morado);">bioecologicoeirl@gmail.com</a> o comunícate por WhatsApp al <a href="https://wa.me/51918005466" target="_blank" style="color:var(--primario-morado);">+51 918 005 466</a>.</p>
+    </div>
+
+    <div class="section-block">
+        <h2>🔗 Terceros y Servicios Externos</h2>
+        <p>Utilizamos los siguientes servicios de terceros para operar nuestro sitio:</p>
+        <ul>
+            <li><strong>Supabase:</strong> Base de datos segura para almacenar los diagnósticos enviados. <a href="https://supabase.com/privacy" target="_blank" style="color:var(--primario-morado);">Ver su política de privacidad</a>.</li>
+            <li><strong>WhatsApp Business (Meta):</strong> Canal de comunicación directa con agricultores. <a href="https://www.whatsapp.com/legal/privacy-policy" target="_blank" style="color:var(--primario-morado);">Ver su política de privacidad</a>.</li>
+            <li><strong>Google Analytics (opcional):</strong> Análisis de tráfico web anónimo.</li>
+        </ul>
+        <p>Estos servicios tienen sus propias políticas de privacidad y son los únicos terceros con los que podríamos compartir datos de forma limitada y con fines operativos.</p>
+    </div>
+
+    <div class="section-block">
+        <h2>📝 Cambios a esta Política</h2>
+        <p>Nos reservamos el derecho de actualizar esta política de privacidad cuando sea necesario. Cualquier cambio importante será notificado a través de nuestro sitio web. Te recomendamos revisarla periódicamente.</p>
+    </div>
+
+    <div class="section-block">
+        <h2>📞 Contacto para Asuntos de Privacidad</h2>
+        <p>Si tienes alguna duda, queja o solicitud relacionada con el tratamiento de tus datos personales:</p>
+        <ul>
+            <li>✉️ <a href="mailto:bioecologicoeirl@gmail.com" style="color:var(--primario-morado);">bioecologicoeirl@gmail.com</a></li>
+            <li>📱 <a href="https://wa.me/51918005466" target="_blank" style="color:var(--primario-morado);">+51 918 005 466</a> (WhatsApp)</li>
+            <li>📍 Sullana, Piura, Perú</li>
+        </ul>
+    </div>
+
+</div>
+
+
+
+    </main>
+		<Footer />
+</body>
+</html>

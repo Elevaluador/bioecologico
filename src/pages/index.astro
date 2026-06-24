@@ -1,0 +1,367 @@
+---
+import BaseHead from '../components/BaseHead.astro';
+import Footer from '../components/Footer.astro';
+import Header from '../components/Header.astro';
+import Formulario from '../components/Formulario.astro';
+import Cookies from '../components/cookies.astro';
+import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
+export const prerender = true;  // ← Esta página SÍ es estática (SSG)
+---
+
+<!doctype html>
+<html lang="es">
+	<head>
+		<BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
+		<style>
+		.hero-section {
+            position: relative;
+            padding: 2rem;
+            color: var(--blanco);
+            display: flex;
+            overflow: hidden;
+            min-height: 100vh; /* o el alto que necesites */
+        }
+        /* La imagen como fondo real */
+       .hero-bg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center top;
+    z-index: 0;
+}
+/* El gradiente overlay ahora es un pseudo-elemento o capa extra */
+.hero-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+        rgba(74, 124, 89, 0.85),
+        rgba(103, 55, 167, 0.9)
+    );
+    z-index: 1;
+}
+
+
+/* Tu contenido por encima de todo */
+.hero-content {
+  position: relative;
+  z-index: 2;
+}
+        .hero-container {
+             position: relative;
+             z-index: 2;
+            display: flex;
+             width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            gap: 3rem;
+            align-items: center;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+        .hero-text h1 {
+            font-size: 3rem;
+            font-weight: 800;
+            line-height: 1.2;
+            margin-top: 1.9rem;
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+        .hero-text h1 span {
+            color: #d4f5d4;
+        }
+        .hero-text p {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+        }
+	 /* Problem Section */
+        .problem-section {
+            background: linear-gradient(to bottom, #fff 0%, #f8f9fa 100%);
+            padding: 5rem 2rem;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .section-title {
+            text-align: center;
+            font-size: 2.3rem;
+            margin-bottom: 1rem;
+            font-weight: 700;
+            line-height: 1.1;
+        }
+        .section-subtitle {
+            text-align: center;
+            font-size: 1.4rem;
+            color: #666;
+            margin-bottom: 3rem;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+        .stat-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+            text-align: center;
+            transition: transform 0.3s ease;
+            border-left: 10px solid var(--primario-morado);
+        }
+        .stat-card:hover {
+            transform: translateY(-5px);
+        }
+        .stat-number {
+            font-size: 3rem;
+            font-weight: 800;
+            color: var(--secundario-marron);
+            margin-bottom: 0.5rem;
+        }
+        .stat-label {
+            font-size: 1.1rem;
+            color: #555;
+            font-weight: 500;
+        }
+        /* Solution Section */
+        .solution-section {
+            background: linear-gradient(135deg, var(--primario-verde) 0%, #2d4b27 50%, var(--primario-morado) 100%);
+            padding: 5rem 2rem;
+            color: white;
+        }
+        .solution-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2.5rem;
+            margin-top: 3rem;
+        }
+       .solution-card {
+    background: rgba(88, 57, 38, 0.92); /* ← sube opacidad */
+    padding: 2.5rem;
+    border-radius: 15px;
+    border: 1px solid var(--secundario-amarillo);
+    transition: all 0.3s ease;
+}
+        .solution-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+        .solution-card h3 {
+            font-size: 1.6rem;
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+        .solution-card p {
+            font-size: 1.1rem;
+            line-height: 1.7;
+            opacity: 0.95;
+        }
+        /* SEO Section */
+        .seo-section {
+            padding: 4rem 2rem;
+            background: white;
+            text-align: center;
+        }
+        .seo-section h2 {
+            font-size: 2.3rem;
+            color: var(--primario-verde);
+            margin-bottom: 2rem;
+            font-weight: 700;
+            line-height: 1.1;
+        }
+        .seo-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+            max-width: 1200px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .seo-card {
+            background: var(--fondo-claro);
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+        }
+        .seo-card h3 {
+            color: var(--primario-morado);
+            margin-bottom: 1rem;
+            font-size: 1.4rem;
+        }
+        .seo-card p {
+            color: #555;
+            line-height: 1.8;
+        }
+		.btn-primary{
+            background: var(--primario-morado);
+            color:var(--blanco);
+            padding:12px 24px;
+            border-radius: 50px;
+            font-size: 13px;
+            max-width: 300px;
+        }
+             @media (min-width: 750px) {
+                .btn-primary{
+                 font-size:20px ;
+                }
+                 .hero-text h1 {
+            margin-top: 1.5rem;
+    
+        }
+                .hero-section {
+        min-height: 100vh;
+    }
+    .hero-container {
+    display: grid;
+    grid-template-columns: 1fr 1.2fr;    
+    }
+    
+  }
+
+</style>
+	</head>
+	<body>
+		<Header />
+	<main>
+	    <section class="hero-section">
+             <!-- Imagen LCP optimizada -->
+        <img 
+            src="/produccion-sullana-biofertilizantes-bioecologico.webp"  
+            alt="Producción de biofertilizantes en Sullana" 
+            class="hero-bg"
+            fetchpriority="high"
+            loading="eager"
+            width="1920"
+            height="1080"
+        />
+            <div class="hero-container">
+                <div class="hero-text">
+                  <h1><span style="color:var(--secundario-amarillo)">Sullana</span>: Recupera tu suelo y mejora el rendimiento de tu cosecha</h1>
+                  <h2 style="font-size: 1.25rem; background-color: rgba(63, 21, 88, 0.8); border-radius: 20px; padding: 10px; text-align: center; margin-block: 20px;">
+                    Responde este formulario en 60 segundos y obtén un diagnóstico inteligente</h2>
+                  <p>Analiza hoy el estado de tu suelo y recibe recomendaciones basadas en biofertilizantes para mejorar la salud del suelo, reducir tus costos y aumentar la productividad de cultivos clave de Piura <strong>(Limón, Arroz, Mango, Plátano y Papaya)</strong></p>
+                  <ul style="background:var(--primario-verde); list-style: none; margin-bottom: 1.5rem; padding: 1.5rem; border-radius: 15px;"> 
+                        <li style="margin-bottom: 10px;">✅ Recomendaciones inteligentes para corregir problemas en tu suelo y cultivo.</li>
+                        <li style="margin-bottom: 10px;">✅ Asesoría técnica especializada.</li>
+                        <li style="margin-bottom: 10px;">✅ Alternativa orgánica para reducir el uso de fertilizantes químicos.</li>
+                        <li style="margin-bottom: 10px;">✅ Respuesta en 24 horas o directamente al WhatsApp</li>
+                        <li style="margin-bottom: 10px;">✅ Sin Compromiso y 100% Confidencial</li>
+                  </ul>
+                </div>
+                <Formulario />
+            </div>
+            
+			
+        </section>
+
+
+			<!-- Problem Section -->
+    <section class="problem-section" id ="problema">
+        <div class="container">
+            <h2 class="section-title"><span style="color: var(--primario-verde);">El Problema</span> <span style="color: var(--primario-morado);">que Enfrentan</span> <span style="color: var(--primario-verde);">los Agricultores</span> <span style="color: var(--primario-morado);">de Piura</span></h2>
+            <p class="section-subtitle">La salinización está destruyendo tu inversión y reduciendo tus ganancias año tras año</p>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-number">112,000+</div>
+                    <div class="stat-label">Hectáreas en salinización</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">46.7%</div>
+                    <div class="stat-label">Aumento de costos</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">-58%</div>
+                    <div class="stat-label">Reducción rendimiento</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">89.5%</div>
+                    <div class="stat-label">Dependencia de químicos Importados</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">22-24%</div>
+                    <div class="stat-label">Retorno salino por Riego</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">5,000+</div>
+                    <div class="stat-label">Agricultores afectados solo en Cieneguillo(Sullana)</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Solution Section -->
+    <section class="solution-section" id="solucion">
+        <div class="container">
+            <h2 class="section-title" style="color: white;"><span style="color: #d4f5d4;">Nuestra Solución:</span> <span style="color: var(--secundario-amarillo);">Bioecológico</span> <span style="color: #d4f5d4;">AgTech</span></h2>
+            <p class="section-subtitle" style="color: rgba(255,255,255,0.9);">Biofertilizantes regenerativos basados en bioles y microorganismos</p>
+            <div class="solution-grid">
+                <div class="solution-card">
+                    <div class="solution-icon">🌿</div>
+                    <h3>Mejora Microbiológica</h3>
+                    <p>Restauramos la salud de tu suelo con microorganismos beneficiosos que regeneran estructura y reducen salinización.</p>
+                </div>
+                <div class="solution-card">
+                    <div class="solution-icon">📊</div>
+                    <h3>Plataforma Inteligente</h3>
+                    <p>Sistema tecnológico que analiza tu terreno y recomienda el plan de fertilización exacto para maximizar resultados.</p>
+                </div>
+                <div class="solution-card">
+                    <div class="solution-icon">🎯</div>
+                    <h3>Asistencia Técnica</h3>
+                    <p>El Ing. Raul Flores te acompaña desde la evaluación inicial hasta el seguimiento de resultados, que comienzan a verse desde la tercera semana .</p>
+                </div>
+                <div class="solution-card">
+                    <div class="solution-icon">🌾</div>
+                    <h3>Especializado por Cultivo</h3>
+                    <p>Fórmulas específicas optimizadas para arroz, mango, plátano, limón y papaya de la región Piura.</p>
+                </div>
+                <div class="solution-card">
+                    <div class="solution-icon">💚</div>
+                    <h3>100% Orgánico</h3>
+                    <p>Biofertilizantes organicos que cuidan el medio ambiente y mejoran la calidad de tu producción.</p>
+                </div>
+                <div class="solution-card">
+                    <div class="solution-icon">💰</div>
+                    <h3>Reduce Costos</h3>
+                    <p>Comprobado: Reduce dependencia de químicos importados y mejora rendimiento hasta 5% adicional.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SEO Section -->
+    <section class="seo-section" id="biofertilizantes">
+        <h2>¿Qué son abonos orgánicos y por qué tu campo en Sullana los necesita?</h2>
+        <p style="text-align: center; color: #555; max-width: 800px; margin: 0 auto 2rem;">El uso de <strong>biofertilizantes en la agricultura</strong> ha dejado de ser una opción para convertirse en una necesidad. En Sullana, la salinización por el exceso de químicos está destruyendo el rendimiento. Los <strong>biofertilizantes orgánicos</strong> son la respuesta tecnológica a este problema.</p>
+        <div class="seo-content">
+            <div class="seo-card">
+                <h3>El Poder del Abono Natural</h3>
+                <p>Muchos agricultores se preguntan <strong>qué abono orgánico</strong> usar. Nuestros <strong>fertilizantes naturales</strong> no solo nutren la planta, sino que regeneran la microbiología del suelo, actuando como el mejor <strong>fertilizante natural</strong> disponible en Piura.</p>
+            </div>
+            <div class="seo-card">
+                <h3>Transición a Fertilizantes Orgánicos</h3>
+                <p><strong>Los biofertilizantes</strong> están diseñados para reducir hasta en un 46% el costo que inviertes en la agricultura tradicional. Implementar una <strong>fertilización orgánica</strong> estructurada garantiza cosechas más fuertes, limpias y altamente rentables.</p>
+            </div>
+        </div>
+        <a href="https://wa.me/51918005466?text=Hola,%20quiero%20información%20sobre%20los%20biofertilizantes" class="btn-primary" target="_blank" >Cotizar fertilizantes para mejorar el rendimiento</a>
+    </section>
+
+		</main>
+		<Footer />
+        <Cookies />
+	</body>
+</html>

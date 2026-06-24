@@ -1,0 +1,1423 @@
+---
+// FormularioAgTech.astro
+// No hay lógica de servidor necesaria aquí, todo es cliente
+---
+<style>
+  /* =============================================
+     BASE (Mobile-first: aplica a todos los tamaños)
+     ============================================= */
+
+  .form-container {
+    background: var(--blanco);
+    padding: 1.5rem;
+    border-radius: 20px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+  }
+
+  .innovation-badge {
+    display: inline-block;
+    background: var(--primario-morado);
+    color: var(--blanco);
+    padding: 0.5rem 1.5rem;
+    border-radius: 25px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+
+  .form-title {
+    color: var(--primario-verde);
+    font-size: 1.8rem;
+    margin-bottom: 0.5rem;
+    font-weight: 700;
+  }
+
+  .form-description {
+    color: #666;
+    margin-bottom: 1.5rem;
+  }
+
+  /* --- Pasos del formulario --- */
+  .form-steps {
+    display: flex;
+    justify-content: space-between;
+    margin: 2rem 0;
+    position: relative;
+  }
+
+  .form-steps::before {
+    content: '';
+    position: absolute;
+    top: 15px;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: #e0e0e0;
+    z-index: 0;
+  }
+
+  .step {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .step-number {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background: #e0e0e0;
+    color: #666;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.9rem;
+    font-weight: bold;
+    transition: 0.3s;
+  }
+
+  .step-label {
+    font-size: 0.75rem;
+    margin-top: 0.5rem;
+    color: #666;
+  }
+
+  .step.active .step-number {
+    background: var(--primario-morado);
+    color: var(--blanco);
+  }
+
+  .step.completed .step-number {
+    background: var(--primario-verde);
+    color: var(--blanco);
+  }
+
+  /* --- Pasos del contenido --- */
+  .form-step {
+    display: none;
+  }
+
+  .form-step.active {
+    display: block;
+    animation: fadeIn 0.4s ease;
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .step-title {
+    color: var(--primario-verde);
+    font-size: 1.4rem;
+    margin-bottom: 1.5rem;
+    font-weight: 700;
+  }
+
+  /* --- Grupos de campos --- */
+  .form-group {
+    margin-bottom: 1.2rem;
+  }
+
+  .form-row {
+    display: grid;
+    grid-template-columns: 1fr; /* Mobile: una columna */
+    gap: 1rem;
+  }
+
+  .form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 700;
+    font-size: 0.95rem;
+    color: var(--secundario-marron);
+  }
+
+  .form-group input,
+  .form-group select,
+  .form-group textarea {
+    width: 100%;
+    padding: 0.8rem;
+    border: 2px solid #e0e0e0;
+    border-radius: 8px;
+    font-family: inherit;
+    font-size: 1rem;
+  }
+
+  .form-group input:focus,
+  .form-group select:focus,
+  .form-group textarea:focus {
+    border-color: var(--primario-verde);
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(37, 65, 34, 0.1);
+  }
+
+  /* --- Checkboxes --- */
+  .checkbox-grid {
+    display: grid;
+    grid-template-columns: 1fr; /* Mobile: una columna */
+    gap: 0.8rem;
+  }
+
+  .checkbox-label {
+    display: flex;
+    align-items: center;
+    padding: 0.6rem;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: all 0.3s;
+  }
+
+  .checkbox-label:hover {
+    background: #f8f9fa;
+    border-color: var(--primario-verde);
+  }
+
+  .checkbox-label input {
+    margin-right: 8px;
+    cursor: pointer;
+    accent-color: red;
+  }
+
+  /* --- Botones --- */
+  .btn-next,
+  .btn-back,
+  .submit-button,
+  .btn-whatsapp,
+  .btn-primary {
+    padding: 1rem;
+    border: none;
+    border-radius: 8px;
+    font-size: 1.1rem;
+    font-weight: bold;
+    cursor: pointer;
+    color: var(--blanco);
+    transition: 0.3s;
+  }
+
+  .btn-primary {
+    padding: 0.3rem;
+    font-size: 0.8rem;
+  }
+
+  .btn-next,
+  .submit-button {
+    width: 100%;
+    background: var(--primario-verde);
+  }
+
+  .btn-next:hover,
+  .submit-button:hover {
+    opacity: 0.9;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+  }
+
+  .btn-back {
+    background: #e0e0e0;
+    color: #555;
+    flex: 1;
+  }
+
+  .btn-back:hover {
+    background: #d0d0d0;
+  }
+
+  .btn-whatsapp {
+    background: var(--secundario-marron);
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    text-decoration: none;
+    margin-top: 1rem;
+  }
+
+  /* --- Navegación entre pasos --- */
+  .form-nav {
+    display: flex;
+    flex-direction: column; /* Mobile: apilados */
+    gap: 1rem;
+    margin-top: 2rem;
+  }
+
+  /* --- Cajas informativas --- */
+  .cultivo-info,
+  .potential-box,
+  .diagnosis-box {
+    background: var(--primario-morado);
+    padding: 1.5rem;
+    border-radius: 10px;
+    margin: 1rem 0;
+    border-left: 4px solid var(--secundario-amarillo);
+  }
+
+  .cultivo-info h4,
+  .potential-box h4,
+  .diagnosis-box h4 {
+    color: var(--secundario-amarillo);
+    margin-bottom: 1rem;
+  }
+
+  .potential-stat {
+    display: flex;
+    justify-content: space-between;
+    margin: 0.5rem 0;
+    font-size: 0.95rem;
+  }
+
+  .potential-stat strong {
+    color: var(--secundario-amarillo);
+    font-weight: 700;
+  }
+
+  .problem-item {
+    padding: 1rem;
+    margin: 0.8rem 0;
+    border-radius: 6px;
+    border-left: 3px solid var(--secundario-amarillo);
+  }
+
+  /* --- Privacidad --- */
+  .privacy-note {
+    background: #e8f5e9;
+    padding: 1rem;
+    border-radius: 8px;
+    margin: 1.5rem 0;
+    font-size: 0.9rem;
+    color: #555;
+    text-align: center;
+  }
+
+  /* --- Mensaje de estado --- */
+  #mensajeFormulario {
+    padding: 15px;
+    border-radius: 10px;
+    margin: 15px 0;
+    display: none;
+    font-weight: 500;
+    animation: slideDown 0.4s ease;
+  }
+
+  #mensajeFormulario.error {
+    background-color: #ffebee;
+    color: #c62828;
+    border: 2px solid #ef5350;
+    border-left: 4px solid #c62828;
+  }
+
+  #mensajeFormulario.warning {
+    background-color: #fff8e1;
+    color: #f57f17;
+    border: 2px solid #ffd54f;
+    border-left: 4px solid #f57f17;
+  }
+
+  #mensajeFormulario.success {
+    background-color: #e8f5e9;
+    color: #2e7d32;
+    border: 2px solid #66bb6a;
+    border-left: 4px solid #2e7d32;
+  }
+
+  @keyframes slideDown {
+    from {
+      opacity: 0;
+      transform: translateY(-10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  /* --- Pantalla de éxito --- */
+  .success-screen {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, var(--primario-morado) 0%, #2d4b27 50%, var(--primario-verde) 100%);
+    z-index: 99999;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+    overflow-y: auto;
+  }
+
+  .success-screen.active {
+    display: flex;
+  }
+
+  .success-content {
+    background: white;
+    border-radius: 20px;
+    max-width: 600px;
+    width: 100%;
+    text-align: center;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+    animation: slideUp 0.5s ease;
+    padding-top: 36rem;
+  }
+
+  
+  @keyframes slideUp {
+    from {
+      opacity: 0;
+      transform: translateY(50px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .success-content h2 {
+    color: var(--primario-verde);
+    font-size: 2rem;
+    margin:0 0 1.5rem;
+  }
+
+  .success-content p {
+    color: #555;
+    margin: 1.5rem 0;
+    line-height: 1.6;
+  }
+
+  .success-data-box {
+    background: #f8f9fa;
+    padding: 1.5rem;
+    border-radius: 10px;
+    margin: 1.5rem 0;
+    text-align: left;
+  }
+
+  .success-data-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 0.8rem 0;
+    border-bottom: 1px solid #e0e0e0;
+  }
+
+  .success-data-item:last-child {
+    border-bottom: none;
+  }
+
+  .success-data-label {
+    font-weight: 600;
+    color: var(--primario-verde);
+  }
+
+  .success-data-value {
+    color: #666;
+    font-weight: 500;
+  }
+
+  .close-success {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background: rgba(255,255,255,0.2);
+    border: none;
+    color: white;
+    font-size: 28px;
+    cursor: pointer;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: 0.3s;
+  }
+
+  .close-success:hover {
+    background: rgba(255,255,255,0.3);
+  }
+
+  /* =============================================
+     TABLET (≥ 500px)
+     ============================================= */
+  @media (min-width: 500px) {
+    .success-content {
+      padding-top: 28rem;
+    }
+    .success-content h2 {
+      margin-top: 0.1rem;
+    }
+  }
+
+  /* =============================================
+     TABLET LANDSCAPE / DESKTOP PEQUEÑO (≥ 768px)
+     ============================================= */
+  @media (min-width: 768px) {
+    .form-container {
+      padding: 2.5rem;
+    }
+
+    .form-row {
+      grid-template-columns: 1fr 1fr;
+    }
+
+    .checkbox-grid {
+      grid-template-columns: 1fr 1fr;
+    }
+
+    .form-nav {
+      flex-direction: row;
+    }
+
+    .btn-back {
+      flex: 0.5;
+      margin-right: 1rem;
+    }
+
+    .btn-primary {
+      padding: 1rem;
+      font-size: 1.1rem;
+    }
+
+    .success-content {
+    padding-top: 400px;
+    }
+  
+    .success-content h2 {
+      margin-bottom: 2rem;
+    }
+  }
+</style>
+<style is:global>
+   /* --- Recomendaciones --- */
+  .recommendation-box {
+    background: linear-gradient(135deg, #e8f5e9 0%, #e1f5fe 100%);
+    padding: 2rem;
+    border-radius: 15px;
+    margin-bottom: 2rem;
+  }
+
+  .recommendation-item {
+    background: white;
+    padding: 1rem;
+    border-radius: 8px;
+    margin: 0.8rem 0;
+    border-left: 3px solid var(--primario-morado);
+  }
+
+  .recommendation-item h5 {
+    color: var(--primario-morado);
+    margin-bottom: 0.5rem;
+  }
+</style>
+<!-- Success Screen -->
+<div id="successScreen" class="success-screen">
+    <div class="success-content">
+        <button class="close-success" id="closeSuccessBtn">×</button>
+        <div class="emoji" style="font-size: 60px;">🎉</div>
+        <h2>¡Diagnóstico Recibido!</h2>
+        <p>Hemos registrado tu información correctamente. Un especialista te contactará en las próximas 24 horas con tu plan personalizado.</p>
+        
+        <div class="success-data-box">
+            <div class="success-data-item">
+                <span class="success-data-label">Nombre:</span>
+                <span class="success-data-value" id="successNombre">--</span>
+            </div>
+            <div class="success-data-item">
+                <span class="success-data-label">Cultivo:</span>
+                <span class="success-data-value" id="successCultivo">--</span>
+            </div>
+            <div class="success-data-item">
+                <span class="success-data-label">Ubicación:</span>
+                <span class="success-data-value" id="successUbicacion">--</span>
+            </div>
+            <div class="success-data-item">
+                <span class="success-data-label">Ahorro estimado anual:</span>
+                <span class="success-data-value" id="successAhorro">S/ --</span>
+            </div>
+            <div class="success-data-item">
+                <span class="success-data-label">Problemas:</span>
+                <span class="success-data-value" id="successProblemas">--</span>
+            </div>
+        </div>
+
+        <a href="https://wa.me/51918005466?text=Hola,%20acabo%20de%20completar%20el%20diagnóstico%20AgTech." class="btn-whatsapp" target="_blank" id="whatsappSuccess">
+            💬 Hablar con un Ingeniero Especializado
+        </a>
+        <a href="#" id="backToHome" style="display: block; margin-top: 1rem; color: #666; text-decoration: none;">← Volver al inicio</a>
+    </div>
+</div>
+    
+<!-- Form Section -->
+<div class="form-container" id="contacto">
+    <div class="innovation-badge">🚀 Diagnóstico Inteligente AgTech</div>
+    <h2 class="form-title">Evalúa tu Terreno</h2>
+    <p class="form-description">Completa los datos para generar tu plan de fertilización orgánica en 60 segundos</p>
+
+    <div class="form-steps">
+        <div class="step active" data-step="1">
+            <div class="step-number">1</div>
+            <div class="step-label">Datos Básicos</div>
+        </div>
+        <div class="step" data-step="2">
+            <div class="step-number">2</div>
+            <div class="step-label">Tu Cultivo</div>
+        </div>
+        <div class="step" data-step="3">
+            <div class="step-number">3</div>
+            <div class="step-label">Diagnóstico</div>
+        </div>
+        <div class="step" data-step="4">
+            <div class="step-number">4</div>
+            <div class="step-label">Recomendación</div>
+        </div>
+    </div>
+
+    <!-- Mensaje de error/éxito -->
+    <div id="mensajeFormulario"></div>
+
+    <form id="contactForm">
+        <!-- Step 1: Datos Básicos -->
+        <div class="form-step active" data-step="1">
+            <h3 class="step-title">Cuéntanos sobre ti</h3>
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="nombre">Nombre Completo *</label>
+                    <input type="text" id="nombre" name="nombre" required placeholder="Ej: Juan Pérez García">
+                </div>
+                <div class="form-group">
+                    <label for="telefono">Teléfono / WhatsApp *</label>
+                    <input type="tel" id="telefono" name="telefono" required pattern="9[0-9]{8}" maxlength="9" title="El número debe empezar con 9 y tener exactamente 9 dígitos." placeholder="Ej: 987654321">
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="ubicacion">Ubicación del Terreno (Distrito, Provincia) *</label>
+                <input type="text" id="ubicacion" name="ubicacion" required placeholder="Ej: Sullana, Piura">
+            </div>
+            <button type="button" class="btn-next" data-next="2">Siguiente →</button>
+        </div>
+
+        <!-- Step 2: Tu Cultivo -->
+        <div class="form-step" data-step="2">
+            <h3 class="step-title">Información de tu cultivo</h3>
+            <div class="form-group">
+                <label for="cultivo">Tipo de Cultivo Principal *</label>
+                <select id="cultivo" name="cultivo" required data-action="update-cultivo">
+                    <option value="">Selecciona un cultivo</option>
+                    <option value="arroz">🌾 Arroz</option>
+                    <option value="mango">🥭 Mango</option>
+                    <option value="platano">🍌 Plátano</option>
+                    <option value="limon">🍋 Limón</option>
+                    <option value="papaya">🍈 Papaya</option>
+                    <option value="otro">🌱 Otro</option>
+                </select>
+            </div>
+            <div id="cultivoInfo" class="cultivo-info" style="display: none;"></div>
+            <div class="form-group">
+                <label for="anos">Años cultivando *</label>
+                <select id="anos" name="anos" required>
+                    <option value="">Selecciona</option>
+                    <option value="0-1">Menos de 1 año</option>
+                    <option value="1-3">1 - 3 años</option>
+                    <option value="3-5">3 - 5 años</option>
+                    <option value="6-10">6 - 10 años</option>
+                    <option value="10+">Más de 10 años</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="hectareas">Hectáreas Cultivadas *</label>
+                <select id="hectareas" name="hectareas" required data-action="calculate-potential">
+                    <option value="">Selecciona una opción</option>
+                    <option value="1-5">1 - 5 hectáreas</option>
+                    <option value="6-10">6 - 10 hectáreas</option>
+                    <option value="11-20">11 - 20 hectáreas</option>
+                    <option value="21-50">21 - 50 hectáreas</option>
+                    <option value="+50">más de 50 hectáreas</option>
+                </select>
+            </div>
+            <div id="potentialSavings" class="potential-box" style="display: none;"></div>
+            <div class="form-nav">
+                <button type="button" class="btn-back" data-next="1">← Atrás</button>
+                <button type="button" class="btn-next" data-next="3">Siguiente →</button>
+            </div>
+        </div>
+
+        <!-- Step 3: Diagnóstico -->
+        <div class="form-step" data-step="3">
+            <h3 class="step-title">Diagnóstico de tu terreno</h3>
+            <div class="form-group">
+                <label>¿Qué problemas has notado? (Selecciona todos los que apliquen)</label>
+                <div class="checkbox-grid">
+                    <label class="checkbox-label">
+                        <input type="checkbox" name="problemas" value="salinidad" data-action="update-diagnosis">
+                        <span style="color:var(--primario-morado); font-weight:480;">Suelo salino/blanquecino</span>
+                    </label>
+                    <label class="checkbox-label">
+                        <input type="checkbox" name="problemas" value="bajo_rendimiento" data-action="update-diagnosis">
+                        <span style="color:var(--primario-morado); font-weight:480;">Bajo rendimiento</span>
+                    </label>
+                    <label class="checkbox-label">
+                        <input type="checkbox" name="problemas" value="altos_costos" data-action="update-diagnosis">
+                        <span style="color:var(--primario-morado); font-weight:480;">Altos costos de fertilización</span>
+                    </label>
+                    <label class="checkbox-label">
+                        <input type="checkbox" name="problemas" value="plagas" data-action="update-diagnosis">
+                        <span style="color:var(--primario-morado); font-weight:480;">Plagas/Enfermedades</span>
+                    </label>
+                    <label class="checkbox-label">
+                        <input type="checkbox" name="problemas" value="drenaje" data-action="update-diagnosis">
+                        <span style="color:var(--primario-morado); font-weight:480;">Problemas de drenaje</span>
+                    </label>
+                    <label class="checkbox-label">
+                        <input type="checkbox" name="problemas" value="riego" data-action="update-diagnosis">
+                        <span style="color:var(--primario-morado); font-weight:480;">Eficiencia de riego baja</span>
+                    </label>
+                    <label class="checkbox-label">
+                        <input type="checkbox" name="problemas" value="amarillamiento" data-action="update-diagnosis">
+                        <span style="color:var(--primario-morado); font-weight:480;">Hojas amarillas</span>
+                    </label>
+                    <label class="checkbox-label">
+                        <input type="checkbox" name="problemas" value="compactacion" data-action="update-diagnosis">
+                        <span style="color:var(--primario-morado); font-weight:480;">Suelo compactado</span>
+                    </label>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="fertilizante_actual">¿Qué fertilizante usas actualmente? *</label>
+                <select id="fertilizante_actual" name="fertilizante_actual" required>
+                    <option value="">Selecciona</option>
+                    <option value="quimico_importado">Químico importado</option>
+                    <option value="quimico_nacional">Químico nacional</option>
+                    <option value="organico">Orgánico</option>
+                    <option value="mixto">Mixto (químico y orgánico)</option>
+                    <option value="ninguno">Ninguno/No uso</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="gasto_mensual">Gasto mensual aproximado en fertilizantes *</label>
+                <select id="gasto_mensual" name="gasto_mensual" required data-action="calculate-savings">
+                    <option value="">Selecciona</option>
+                    <option value="500">Menos de S/500</option>
+                    <option value="1000">S/500 - S/1,000</option>
+                    <option value="2500">S/1,000 - S/2,500</option>
+                    <option value="5000">S/2,500 - S/5,000</option>
+                    <option value="10000">Más de S/5,000</option>
+                </select>
+            </div>
+            <div id="diagnosisResult" class="diagnosis-box" style="display: none;"></div>
+            <div class="form-nav">
+                <button type="button" class="btn-back" data-next="2">← Atrás</button>
+                <button type="button" class="btn-next" data-next="4">Ver Recomendación →</button>
+            </div>
+        </div>
+
+        <!-- Step 4: Recomendación -->
+        <div class="form-step" data-step="4">
+            <h3 class="step-title">Tu Plan Personalizado</h3>
+            <div id="recommendationResult" class="recommendation-box"></div>
+            <div class="form-group">
+                <label for="interes">¿Qué te gustaría hacer ahora? *</label>
+                <select id="interes" name="interes" required>
+                    <option value="">Selecciona una opción</option>
+                    <option value="asesoria">📞 Recibir asesoría técnica gratuita</option>
+                    <option value="cotizacion">💰 Solicitar cotización personalizada</option>
+                    <option value="visita">🚜 Visita técnica a mi campo</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="comentarios">Comentarios adicionales (opcional)</label>
+                <textarea id="comentarios" name="comentarios" placeholder="Cuéntanos algo más sobre tu situación..."></textarea>
+            </div>
+            <div class="privacy-note">
+                🔒 Tus datos están seguros. Solo los usaremos para contactarte y brindarte la mejor asesoría.
+            </div>
+            <div class="form-nav">
+                <button type="button" class="btn-back" data-next="3">← Atrás</button>
+                <button type="submit" class="submit-button">Enviar Diagnóstico Completo 🚀</button>
+            </div>
+        </div>
+    </form>
+</div>
+
+<script>
+// ============ TIPOS ============
+
+interface CultivoData {
+  nombre: string;
+  icon: string;
+  problemas: string[];
+  soluciones: string[];
+  ahorroPotencial: number;
+}
+
+interface ProblemaInfo {
+  titulo: string;
+  descripcion: string;
+  impacto: string;
+}
+
+interface FormData {
+  nombre: string;
+  telefono: string;
+  ubicacion: string;
+  cultivo: string;
+  hectareas: string;
+  anos_cultivando: string;
+  problemas: string;
+  fertilizante_actual: string;
+  gasto_mensual: string;
+  tipo_interes: string;
+  comentarios: string | null;
+  ahorro_estimado: number;
+  estado: string;
+}
+
+interface Recomendacion {
+  titulo: string;
+  descripcion: string;
+}
+
+// ============ DATOS ============
+
+const cultivoData: Record<string, CultivoData> = {
+  arroz: {
+    nombre: "Arroz",
+    icon: "🌾",
+    problemas: [
+      "Alto consumo de agua (12,000-15,000 m³/ha)",
+      "Muy sensible a salinidad del suelo",
+      "Problemas de drenaje causan pudrición de raíces",
+      "Deficiencia de zinc común en suelos alcalinos"
+    ],
+    soluciones: [
+      "Biofertilizante con microorganismos que mejoran absorción de agua",
+      "Condicionadores de suelo que reducen salinidad",
+      "Inoculantes para mejorar sistema radicular"
+    ],
+    ahorroPotencial: 35
+  },
+  mango: {
+    nombre: "Mango",
+    icon: "🥭",
+    problemas: [
+      "Sensible a sales, especialmente cloruro de sodio",
+      "Necesita potasio para calidad de fruto",
+      "Problemas de floración por estrés nutricional",
+      "Deficiencia de boro afecta cuajado"
+    ],
+    soluciones: [
+      "Bioestimulantes para floración uniforme",
+      "Quelatos orgánicos de micronutrientes",
+      "Mejoradores de suelo para reducir salinidad"
+    ],
+    ahorroPotencial: 40
+  },
+  platano: {
+    nombre: "Plátano",
+    icon: "🍌",
+    problemas: [
+      "Vulnerable a Fusarium en suelos degradados",
+      "Alto requerimiento de potasio (400-600 kg/ha)",
+      "Sensible a pH inadecuado del suelo",
+      "Problemas de nematodos en suelos pobres"
+    ],
+    soluciones: [
+      "Trichoderma y microorganismos antagonistas",
+      "Fuentes orgánicas de potasio de liberación lenta",
+      "Materia orgánica para mejorar estructura"
+    ],
+    ahorroPotencial: 38
+  },
+  limon: {
+    nombre: "Limón",
+    icon: "🍋",
+    problemas: [
+      "Muy sensible a sales en agua de riego",
+      "Clorosis férrica en suelos alcalinos",
+      "Necesita micronutrientes (Zn, Mn, Fe)",
+      "Problemas de gomosis por estrés"
+    ],
+    soluciones: [
+      "Acidificantes orgánicos para pH del suelo",
+      "Quelatos naturales de hierro y zinc",
+      "Bioestimulantes para tolerancia a estrés salino"
+    ],
+    ahorroPotencial: 42
+  },
+  papaya: {
+    nombre: "Papaya",
+    icon: "🍈",
+    problemas: [
+      "Requiere excelente drenaje, sensible a encharcamiento",
+      "Necesita alta materia orgánica (3-5%)",
+      "Sensible a deficiencias de calcio y boro",
+      "Vulnerable a pudrición de raíz en suelos compactos"
+    ],
+    soluciones: [
+      "Compost enriquecido con microorganismos",
+      "Mejoradores de estructura del suelo",
+      "Fuentes orgánicas de calcio y boro"
+    ],
+    ahorroPotencial: 36
+  }
+};
+
+const problemasInfo: Record<string, ProblemaInfo> = {
+  salinidad: {
+    titulo: "Salinización del Suelo",
+    descripcion: "La acumulación de sales reduce absorción de nutrientes y agua",
+    impacto: "Reduce rendimiento entre 20-40% y afecta la germinación",
+  },
+  bajo_rendimiento: {
+    titulo: "Bajo Rendimiento",
+    descripcion: "Puede ser causado por deficiencias nutricionales, compactación o problemas biológicos del suelo",
+    impacto: "Pérdida económica directa en cosechas y menor rentabilidad",
+  },
+  altos_costos: {
+    titulo: "Altos Costos de Fertilización",
+    descripcion: "Dependencia de fertilizantes químicos importados que suben de precio constantemente",
+    impacto: "Reduce margen de ganancia entre 30-50% por cosecha, afectando la sostenibilidad económica del agricultor",
+  },
+  plagas: {
+    titulo: "Plagas y Enfermedades",
+    descripcion: "Suelos degradados son más susceptibles a patógenos",
+    impacto: "Pérdida de producción y necesidad de depender del uso de químicos, lo que eleva los costos y empeora la salud del suelo a largo plazo",
+  },
+  drenaje: {
+    titulo: "Problemas de Drenaje",
+    descripcion: "Suelos compactados o con estructura pobre retienen exceso de agua",
+    impacto: "Pudrición de raíces, asfixia del cultivo y dificultad para el crecimiento de las plantas",
+  },
+  riego: {
+    titulo: "Eficiencia de Riego Baja",
+    descripcion: "El agua se pierde por evaporación o no es absorbida eficientemente",
+    impacto: "Pérdida de agua y reducción en el rendimiento del cultivo"
+  },
+  amarillamiento: {
+    titulo: "Amarillamiento de Hojas",
+    descripcion: "Indica deficiencias nutricionales, especialmente nitrógeno, hierro o magnesio",
+    impacto: "Reducción en la fotosíntesis y el crecimiento de la planta"
+  },
+  compactacion: {
+    titulo: "Suelo Compactado",
+    descripcion: "Reduce penetración de raíces, aireación y drenaje",
+    impacto: "Limita crecimiento radicular y absorción de nutrientes profundos",
+  }
+};
+
+// ============ ESTADO ============
+
+let formData: Partial<FormData> = {};
+let currentStep: number = 1;
+
+// ============ HELPERS ============
+
+function getElement(id: string): HTMLElement {
+  const el = document.getElementById(id);
+  if (!el) throw new Error(`Elemento #${id} no encontrado`);
+  return el;
+}
+
+function getInput(id: string): HTMLInputElement {
+  const el = getElement(id);
+  if (!(el instanceof HTMLInputElement)) throw new Error(`#${id} no es un input`);
+  return el;
+}
+
+function getSelect(id: string): HTMLSelectElement {
+  const el = getElement(id);
+  if (!(el instanceof HTMLSelectElement)) throw new Error(`#${id} no es un select`);
+  return el;
+}
+
+function getTextarea(id: string): HTMLTextAreaElement {
+  const el = getElement(id);
+  if (!(el instanceof HTMLTextAreaElement)) throw new Error(`#${id} no es un textarea`);
+  return el;
+}
+
+function querySelector<T extends Element>(selector: string): T | null {
+  return document.querySelector<T>(selector);
+}
+
+function querySelectorAll<T extends Element>(selector: string): NodeListOf<T> {
+  return document.querySelectorAll<T>(selector);
+}
+
+// ============ FUNCIONES PRINCIPALES ============
+
+function mostrarMensaje(mensaje: string, tipo: 'error' | 'success' | 'warning' = 'error'): void {
+  const mensajeDiv = getElement('mensajeFormulario');
+  mensajeDiv.textContent = mensaje;
+  mensajeDiv.className = tipo;
+  mensajeDiv.style.display = 'block';
+
+  mensajeDiv.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+
+  if (tipo === 'success') {
+    setTimeout(() => {
+      mensajeDiv.style.display = 'none';
+    }, 5000);
+  }
+}
+
+function nextStep(step: number): void {
+  const currentStepElement = querySelector<HTMLElement>(`.form-step[data-step="${currentStep}"]`);
+  if (!currentStepElement) return;
+
+  const requiredFields = currentStepElement.querySelectorAll<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>('[required]');
+  let isValid = true;
+  const camposFaltantes: string[] = [];
+
+  requiredFields.forEach((field) => {
+    if (!field.checkValidity()) {
+      isValid = false;
+      field.style.borderColor = '#ff6b6b';
+      field.style.boxShadow = '0 0 0 3px rgba(255, 107, 107, 0.2)';
+
+      const label = field.parentElement?.querySelector('label')?.textContent || field.name;
+      camposFaltantes.push(label);
+    } else {
+      field.style.borderColor = '#e0e0e0';
+      field.style.boxShadow = 'none';
+    }
+  });
+
+  if (!isValid) {
+    const mensaje = `❌ Por favor verifica que los siguientes campos estén completos antes de continuar:\n\n${camposFaltantes.map((c) => '• ' + c).join('\n')}`;
+    mostrarMensaje(mensaje, 'error');
+    return;
+  }
+
+  getElement('mensajeFormulario').style.display = 'none';
+
+  const currentFormStep = querySelector<HTMLElement>(`.form-step[data-step="${currentStep}"]`);
+  const currentIndicator = querySelector<HTMLElement>(`.step[data-step="${currentStep}"]`);
+  if (currentFormStep) currentFormStep.classList.remove('active');
+  if (currentIndicator) {
+    currentIndicator.classList.add('completed');
+    currentIndicator.classList.remove('active');
+  }
+
+  currentStep = step;
+
+  const nextFormStep = querySelector<HTMLElement>(`.form-step[data-step="${step}"]`);
+  const nextIndicator = querySelector<HTMLElement>(`.step[data-step="${step}"]`);
+  if (nextFormStep) nextFormStep.classList.add('active');
+  if (nextIndicator) nextIndicator.classList.add('active');
+
+  if (step === 4) {
+    generateRecommendation();
+  }
+
+  getElement('contacto').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+
+function previousStep(step: number): void {
+  const currentFormStep = querySelector<HTMLElement>(`.form-step[data-step="${currentStep}"]`);
+  const currentIndicator = querySelector<HTMLElement>(`.step[data-step="${currentStep}"]`);
+  if (currentFormStep) currentFormStep.classList.remove('active');
+  if (currentIndicator) currentIndicator.classList.remove('active');
+
+  currentStep = step;
+
+  const prevFormStep = querySelector<HTMLElement>(`.form-step[data-step="${step}"]`);
+  const prevIndicator = querySelector<HTMLElement>(`.step[data-step="${step}"]`);
+  if (prevFormStep) prevFormStep.classList.add('active');
+  if (prevIndicator) prevIndicator.classList.add('active');
+
+  getElement('contacto').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+
+function updateCultivoInfo(): void {
+  const cultivo = getSelect('cultivo').value;
+  const infoDiv = getElement('cultivoInfo');
+
+  if (cultivo && cultivo !== 'otro' && cultivoData[cultivo]) {
+    const data = cultivoData[cultivo];
+    infoDiv.style.display = 'block';
+    infoDiv.innerHTML = `
+      <h4 style=color:var(--secundario-amarillo);font-size:1.1rem;>${data.icon} Problemas Comunes en ${data.nombre}</h4>
+      <ul style="margin: 0.5rem 0; padding-left: 1.5rem;">
+        ${data.problemas.map((p) => `<li style="margin: 0.3rem 0;">${p}</li>`).join('')}
+      </ul>
+    `;
+  } else {
+    infoDiv.style.display = 'none';
+  }
+  calculatePotential();
+}
+
+function calculatePotential(): void {
+  const cultivo = getSelect('cultivo').value;
+  const hectareas = getSelect('hectareas').value;
+  const potentialDiv = getElement('potentialSavings');
+
+  if (cultivo && hectareas && cultivo !== 'otro' && cultivoData[cultivo]) {
+    const data = cultivoData[cultivo];
+    let hectareasNum = 0;
+
+    switch (hectareas) {
+      case '1-5': hectareasNum = 3; break;
+      case '6-10': hectareasNum = 8; break;
+      case '11-20': hectareasNum = 15; break;
+      case '21-50': hectareasNum = 30; break;
+      case '+50': hectareasNum = 70; break;
+    }
+
+    const ahorroPorHa = 800;
+    const ahorroTotal = hectareasNum * ahorroPorHa * (data.ahorroPotencial / 100);
+    const aumentoRendimiento = data.ahorroPotencial / 10;
+
+    potentialDiv.style.display = 'block';
+    potentialDiv.innerHTML = `
+      <h4 style=color:var(--secundario-amarillo);font-size:1.1rem;>💰 Potencial de Mejora Estimado</h4>
+      <div class="potential-stat">
+        <span>Reducción de costos:</span>
+        <strong style="color:var(--secundario-amarillo);">${data.ahorroPotencial}%</strong>
+      </div>
+      <div class="potential-stat">
+        <span>Ahorro anual estimado:</span>
+        <strong style="color:var(--secundario-amarillo);">S/ ${ahorroTotal.toLocaleString()}</strong>
+      </div>
+      <div class="potential-stat">
+        <span>Aumento de rendimiento:</span>
+        <strong style="color: var(--secundario-amarillo);">+${aumentoRendimiento}%</strong>
+      </div>
+      <p style="margin-top: 1rem; font-size: 0.85rem; color: var(--secundario-amarillo);">
+        *Estimaciones basadas en resultados promedio con agricultores similares
+      </p>
+    `;
+  } else {
+    potentialDiv.style.display = 'none';
+  }
+}
+
+function updateDiagnosis(): void {
+  const problemas = Array.from(document.querySelectorAll<HTMLInputElement>('input[name="problemas"]:checked'))
+    .map((cb) => cb.value);
+  const diagnosisDiv = getElement('diagnosisResult');
+
+  if (problemas.length > 0) {
+    diagnosisDiv.style.display = 'block';
+    diagnosisDiv.innerHTML = `
+      <h4>🔍 Análisis de tu Situación</h4>
+      ${problemas.map((p) => {
+        const info = problemasInfo[p];
+        if (!info) return '';
+        return `
+          <div class="problem-item">
+            <strong>${info.titulo}</strong>
+            <p style="margin: 0.5rem 0; font-size: 0.9rem;">${info.descripcion}</p>
+            <p style="margin: 0.5rem 0; color: var(--secundario-amarillo); font-size: 0.9rem;">
+              ✓ <em style="color: var(--secundario-amarillo);">${info.impacto}</em>
+            </p>
+          </div>
+        `;
+      }).join('')}
+    `;
+  } else {
+    diagnosisDiv.style.display = 'none';
+  }
+}
+
+function calculateSavings(): void {
+  updateDiagnosis();
+}
+
+function generateRecommendation(): void {
+  const cultivo = getSelect('cultivo').value;
+  const hectareas = getSelect('hectareas').value;
+  const problemas = Array.from(document.querySelectorAll<HTMLInputElement>('input[name="problemas"]:checked'))
+    .map((cb) => cb.value);
+  const gastoMensual = getSelect('gasto_mensual').value;
+  const recommendationDiv = getElement('recommendationResult');
+
+  const cultivoInfo = cultivoData[cultivo] || { nombre: 'tu cultivo', ahorroPotencial: 30, soluciones: [] };
+  const ahorroAnual = (parseInt(gastoMensual) || 0) * 12 * (cultivoInfo.ahorroPotencial / 100);
+
+  const recomendaciones: Recomendacion[] = [];
+
+  if (cultivo && cultivo !== 'otro') {
+    recomendaciones.push({
+      titulo: `Plan Específico para ${cultivoInfo.nombre}`,
+      descripcion: cultivoInfo.soluciones.join(', ')
+    });
+  }
+
+  if (problemas.includes('salinidad')) {
+    recomendaciones.push({
+      titulo: "Programa Anti-Salinidad",
+      descripcion: "Aplicación de microorganismos halotolerantes + mejoradores de suelo durante 3 meses"
+    });
+  }
+
+  if (problemas.includes('bajo_rendimiento')) {
+    recomendaciones.push({
+      titulo: "Bioestimulación Integral",
+      descripcion: "Programa de bioestimulantes foliares + enraizadores + fertilización orgánica balanceada"
+    });
+  }
+
+  if (problemas.length > 3) {
+    recomendaciones.push({
+      titulo: "Regeneración Completa del Suelo",
+      descripcion: "Plan de 6 meses para recuperar la salud microbiológica y química del suelo"
+    });
+  }
+
+  if (recomendaciones.length === 0) {
+    recomendaciones.push({
+      titulo: "Plan de Mantenimiento Preventivo",
+      descripcion: "Programa de nutrición balanceada para mantener y mejorar tu rendimiento actual"
+    });
+  }
+
+  recommendationDiv.innerHTML = `
+    <h4 style="color: var(--primario-verde); margin-bottom: 1.5rem; font-size:1rem;">💡 Tu Plan Personalizado Incluye:</h4>
+    <div style="background:var(--secundario-marron); padding: 1.5rem; border-radius: 10px; margin-bottom: 1.5rem; border: 2px solid var(--primario-verde);">
+      <p style="margin: 0; font-size: 0.9rem; color: var(--blanco); text-align: center;">Tu Ahorro Potencial Anual</p>
+      <h3 style="margin: 0.5rem 0; color: var(--secundario-amarillo); text-align: center;">S/ ${ahorroAnual.toLocaleString()}</h3>
+      <p style="margin: 0; font-size: 0.85rem; color: var(--secundario-amarillo); text-align: center;">Reduciendo ${cultivoInfo.ahorroPotencial}% tus costos de fertilización</p>
+    </div>
+    ${recomendaciones.map((rec) => `
+      <div class="recommendation-item">
+        <h5>${rec.titulo}</h5>
+        <p style="margin: 0.5rem 0; color: #555;">${rec.descripcion}</p>
+      </div>
+    `).join('')}
+    <div class="recommendation-item" style="background: var(--primario-morado); border-left: 3px solid var(--primario-verde);">
+      <h5 style="color:var(--secundario-amarillo)">🎯 Próximos Pasos</h5>
+      <ol style="margin: 0.5rem 0; padding-left: 1.5rem; color: var(--blanco);">
+        <li>Diseño de plan de fertilización personalizado</li>
+        <li>Implementación con seguimiento mensual</li>
+        <li>Medición de resultados y ajustes</li>
+      </ol>
+    </div>
+  `;
+}
+
+function showSuccessScreen(data: Partial<FormData>): void {
+  const successScreen = getElement('successScreen');
+
+  getElement('successNombre').textContent = data.nombre || '';
+
+  const cultivoInfo = cultivoData[data.cultivo || ''] || { nombre: data.cultivo || '' };
+  getElement('successCultivo').textContent = cultivoInfo.nombre || data.cultivo || '';
+
+  getElement('successUbicacion').textContent = data.ubicacion || '';
+  getElement('successAhorro').textContent = `S/ ${data.ahorro_estimado ? data.ahorro_estimado.toLocaleString() : '0'}`;
+
+  const problemasTexto = data.problemas || 'ninguno';
+  getElement('successProblemas').textContent = problemasTexto;
+
+  const mensajeWhatsApp = `Hola, acabo de completar el diagnóstico AgTech. Mi nombre es ${data.nombre}, mi cultivo es ${cultivoInfo.nombre || data.cultivo} y tengo ${data.hectareas} hectáreas en ${data.ubicacion} y mis mayores problemas son ${problemasTexto}.`;
+  (getElement('whatsappSuccess') as HTMLAnchorElement).href = `https://wa.me/51918005466?text=${encodeURIComponent(mensajeWhatsApp)}`;
+
+  successScreen.classList.add('active');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeSuccessScreen(): void {
+  const successScreen = getElement('successScreen');
+  successScreen.classList.remove('active');
+  document.body.style.overflow = 'auto';
+
+  (getElement('contactForm') as HTMLFormElement).reset();
+
+  const currentFormStep = querySelector<HTMLElement>(`.form-step[data-step="${currentStep}"]`);
+  const currentIndicator = querySelector<HTMLElement>(`.step[data-step="${currentStep}"]`);
+  if (currentFormStep) currentFormStep.classList.remove('active');
+  if (currentIndicator) currentIndicator.classList.remove('active');
+
+  querySelectorAll<HTMLElement>('.step').forEach((step) => step.classList.remove('completed'));
+
+  currentStep = 1;
+
+  const firstFormStep = querySelector<HTMLElement>(`.form-step[data-step="1"]`);
+  const firstIndicator = querySelector<HTMLElement>(`.step[data-step="1"]`);
+  if (firstFormStep) firstFormStep.classList.add('active');
+  if (firstIndicator) firstIndicator.classList.add('active');
+
+  getElement('cultivoInfo').style.display = 'none';
+  getElement('potentialSavings').style.display = 'none';
+  getElement('diagnosisResult').style.display = 'none';
+  getElement('recommendationResult').innerHTML = '';
+  getElement('mensajeFormulario').style.display = 'none';
+
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// ============ EVENT LISTENERS ============
+
+document.addEventListener('DOMContentLoaded', () => {
+  const form = getElement('contactForm') as HTMLFormElement;
+
+  getSelect('cultivo').addEventListener('change', updateCultivoInfo);
+  getSelect('hectareas').addEventListener('change', calculatePotential);
+  getSelect('gasto_mensual').addEventListener('change', calculateSavings);
+
+  form.addEventListener('change', (e: Event) => {
+    const target = e.target as HTMLElement;
+    if (target.matches('input[name="problemas"]')) {
+      updateDiagnosis();
+    }
+  });
+
+  form.addEventListener('click', (e: MouseEvent) => {
+    const btn = (e.target as HTMLElement).closest('button');
+    if (!btn) return;
+
+    if (btn.classList.contains('btn-next')) {
+      e.preventDefault();
+      const nextStepNum = parseInt(btn.dataset.next || '1');
+      nextStep(nextStepNum);
+    }
+
+    if (btn.classList.contains('btn-back')) {
+      e.preventDefault();
+      const prevStepNum = parseInt(btn.dataset.next || '1');
+      previousStep(prevStepNum);
+    }
+  });
+
+  form.addEventListener('submit', async (e: SubmitEvent) => {
+    e.preventDefault();
+
+    const submitButton = form.querySelector('.submit-button') as HTMLButtonElement;
+    const originalText = submitButton.textContent || 'Enviar';
+    submitButton.textContent = 'Enviando... ⏳';
+    submitButton.disabled = true;
+
+    try {
+      const problemas = Array.from(document.querySelectorAll<HTMLInputElement>('input[name="problemas"]:checked'))
+        .map((cb) => cb.value);
+      const cultivo = getSelect('cultivo').value;
+      const hectareas = getSelect('hectareas').value;
+      const gastoMensual = parseInt(getSelect('gasto_mensual').value) || 0;
+
+      const cultivoInfo = cultivoData[cultivo] || { ahorroPotencial: 30 };
+      const ahorroEstimado = gastoMensual * 12 * (cultivoInfo.ahorroPotencial / 100);
+
+      formData = {
+        nombre: getInput('nombre').value,
+        telefono: getInput('telefono').value,
+        ubicacion: getInput('ubicacion').value,
+        cultivo: cultivo,
+        hectareas: hectareas,
+        anos_cultivando: getSelect('anos').value,
+        problemas: problemas.join(', '),
+        fertilizante_actual: getSelect('fertilizante_actual').value,
+        gasto_mensual: getSelect('gasto_mensual').value,
+        tipo_interes: getSelect('interes').value,
+        comentarios: getTextarea('comentarios').value || null,
+        ahorro_estimado: Math.round(ahorroEstimado),
+        estado: 'nuevo'
+      };
+
+      const response = await fetch('/api/diagnostico', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData)
+      });
+
+      const result = await response.json();
+
+      if (!response.ok) {
+        if (response.status === 409) {
+          mostrarMensaje('⚠️ Ya existe un diagnóstico registrado para este teléfono y cultivo. Nuestro equipo técnico revisará la información y se comunicará contigo.', 'warning');
+          submitButton.textContent = originalText;
+          submitButton.disabled = false;
+          return;
+        }
+        throw new Error(result.error || 'Error al guardar');
+      }
+
+      const savedForms: (Partial<FormData> & { timestamp: string })[] = JSON.parse(localStorage.getItem('agtech_forms') || '[]');
+      savedForms.push({
+        ...formData,
+        timestamp: new Date().toISOString()
+      });
+      localStorage.setItem('agtech_forms', JSON.stringify(savedForms));
+
+      showSuccessScreen(formData);
+
+    } catch (error) {
+      console.error('Error al procesar el formulario:', error);
+      mostrarMensaje('❌ Hubo un error al enviar el formulario. Por favor, intenta contactarnos directamente por WhatsApp: +51 918 005 466', 'error');
+    } finally {
+      submitButton.textContent = originalText;
+      submitButton.disabled = false;
+    }
+  });
+
+  getInput('telefono').addEventListener('input', function(this: HTMLInputElement) {
+    this.value = this.value.replace(/[^0-9]/g, '');
+  });
+
+  const requiredFields = document.querySelectorAll<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>('input[required], select[required], textarea[required]');
+  requiredFields.forEach((field) => {
+    const handleInput = (): void => {
+      if (field.value.trim() !== '') {
+        field.style.borderColor = '#4CAF50';
+        field.style.boxShadow = '0 0 0 3px rgba(76, 175, 80, 0.1)';
+      } else {
+        field.style.borderColor = '#e0e0e0';
+        field.style.boxShadow = 'none';
+      }
+    };
+
+    field.addEventListener('input', handleInput);
+    field.addEventListener('change', handleInput);
+  });
+
+  const observerOptions: IntersectionObserverInit = {
+    threshold: 0.1,
+    rootMargin: '0px 0px -100px 0px'
+  };
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting) {
+        const target = entry.target as HTMLElement;
+        target.style.opacity = '1';
+        target.style.transform = 'translateY(0)';
+      }
+    });
+  }, observerOptions);
+
+  document.querySelectorAll<HTMLElement>('.stat-card, .solution-card').forEach((card) => {
+    card.style.opacity = '0';
+    card.style.transform = 'translateY(30px)';
+    card.style.transition = 'all 0.6s ease';
+    observer.observe(card);
+  });
+});
+// Cerrar pantalla de éxito
+    const closeBtn = document.getElementById('closeSuccessBtn');
+    if (closeBtn) {
+        closeBtn.addEventListener('click', closeSuccessScreen);
+    }
+
+    // Volver al inicio
+    const backLink = document.getElementById('backToHome');
+    if (backLink) {
+        backLink.addEventListener('click', function(e) {
+            e.preventDefault();
+            closeSuccessScreen();
+        });
+    }
+</script>

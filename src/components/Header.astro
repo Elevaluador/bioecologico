@@ -1,0 +1,660 @@
+---
+import HeaderLink from './HeaderLink.astro';
+import MobilLink from './MobilLink.astro';
+import '../styles/global.css';
+import type { ImageMetadata } from 'astro';
+import { Image } from 'astro:assets';
+import logoDestok from '../assets/banner-logo-bioecologico-sullana.webp';
+import logoMobile from '../assets/banner-logo-bioecologico-sullana-mobil.webp';
+
+interface Props {
+    desktopImage?: ImageMetadata;
+    mobileImage?: ImageMetadata;
+}
+
+const {
+    desktopImage = logoDestok,
+    mobileImage = logoMobile,
+} = Astro.props;
+
+const isHomePage = Astro.url.pathname === '/' || Astro.url.pathname === '';
+---
+
+<!-- WhatsApp Float Button -->
+<a href="https://wa.me/51918005466?text=Hola,%20quiero%20información%20sobre%20los%20biofertilizantes%20porque%20tengo%20Problemas%20de%20rendimiento" 
+   class="whatsapp-float" 
+   target="_blank" 
+   rel="noopener noreferrer"
+   aria-label="WhatsApp">
+    <svg xmlns="http://www.w3.org/2000/svg" width="35" height="35" fill="currentColor" viewBox="0 0 16 16">
+        <path d="M13.601 2.326A7.854 7.854 0 0 0 7.994 0C3.627 0 .068 3.558.064 7.926c-.003 1.396.366 2.76 1.057 3.965L0 16l4.204-1.102a7.933 7.933 0 0 0 3.79.965h.004c4.368 0 7.926-3.558 7.93-7.93A7.898 7.898 0 0 0 13.6 2.326zM7.994 14.521a6.573 6.573 0 0 1-3.356-.92l-.24-.144-2.494.654.666-2.433-.156-.251a6.56 6.56 0 0 1-1.007-3.505c0-3.626 2.957-6.584 6.591-6.584a6.56 6.56 0 0 1 4.66 1.931 6.557 6.557 0 0 1 1.928 4.66c-.004 3.639-2.961 6.592-6.592 6.592zm3.615-4.934c-.197-.099-1.17-.578-1.353-.646-.182-.065-.315-.099-.445.099-.133.197-.513.646-.627.775-.114.133-.232.148-.43.05-.197-.1-.836-.308-1.592-.985-.59-.525-.985-1.175-1.103-1.372-.114-.198-.011-.304.088-.403.087-.088.197-.232.296-.346.1-.114.133-.198.198-.33.065-.134.034-.248-.015-.347-.05-.099-.445-1.076-.612-1.47-.16-.389-.323-.335-.445-.34-.114-.005-.247-.007-.38-.007a.729.729 0 0 0-.529.247c-.182.198-.691.677-.691 1.654 0 .977.71 1.916.81 2.049.098.133 1.394 2.132 3.383 2.992.47.205.84.326 1.129.418.475.152.904.129 1.246.08.38-.058 1.171-.48 1.338-.943.164-.464.164-.86.114-.943-.049-.084-.182-.133-.38-.232z"/>
+    </svg>
+</a>
+
+<!-- HEADER -->
+<header class="site-header-top" role="banner">
+    <a href="#" id="logoLink" aria-label="Bioecológico AgTech - Volver al inicio">
+        <picture>
+            <source
+                media="(max-width: 768px)"
+                srcset={logoMobile.src}
+            />
+            <Image
+                src={logoDestok}
+                alt="Bioecológico AgTech"
+                class="site-header-logo"
+                loading="eager"
+                fetchpriority="high"
+            />
+        </picture>
+    </a>
+</header>
+
+<!-- NAVBAR -->
+<nav class="site-navbar" id="mainNavbar" aria-label="Menú principal">
+    <div class="navbar-inner">
+        <ul class="navbar-links" role="list">
+            {isHomePage ? (
+                <>
+                    <li><HeaderLink href="#contacto">Diagnóstico</HeaderLink></li>
+                    <li><HeaderLink href="#problema">El Problema</HeaderLink></li>
+                    <li><HeaderLink href="#solucion">Solución</HeaderLink></li>
+                    <li><HeaderLink href="#biofertilizantes">Biofertilizantes</HeaderLink></li>
+                    <li><HeaderLink href="#">Blog</HeaderLink></li>
+                    <li><HeaderLink href="#footer">Contacto</HeaderLink></li>
+                </>
+            ) : (
+                <>
+                    <li><HeaderLink href="/#contacto">Diagnóstico</HeaderLink></li>
+                    <li><HeaderLink href="/#problema">El Problema</HeaderLink></li>
+                    <li><HeaderLink href="/#solucion">Solución</HeaderLink></li>
+                    <li><HeaderLink href="/#biofertilizantes">Biofertilizantes</HeaderLink></li>
+                    <li><HeaderLink href="#">Blog</HeaderLink></li>
+                    <li><HeaderLink href="/#footer">Contacto</HeaderLink></li>
+                </>
+            )}
+        </ul>
+
+        <div class="navbar-cta">
+            <a href="https://wa.me/51918005466?text=Hola,%20quiero%20información%20sobre%20los%20biofertilizantes"
+               class="btn-nav-cta" 
+               target="_blank" 
+               rel="noopener noreferrer">
+                💬 WhatsApp
+            </a>
+        </div>
+
+        <button class="navbar-hamburger"
+                id="hamburgerBtn"
+                aria-label="Abrir menú"
+                aria-expanded="false"
+                aria-controls="mobileMenu">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+    </div>
+</nav>
+
+<!-- MOBILE MENU -->
+<div class="navbar-mobile-menu" id="mobileMenu"
+     role="dialog" 
+     aria-modal="true" 
+     aria-label="Menú de navegación">
+
+    <ul class="mobile-links" role="list">
+        {isHomePage ? (
+            <>
+                <li>
+                    <MobilLink href="#contacto" data-scroll="contacto">
+                        Diagnóstico Gratuito
+                    </MobilLink>
+                </li>
+                <li>
+                    <MobilLink href="#problema" data-scroll="problema">
+                        El Problema
+                    </MobilLink>
+                </li>
+                <li>
+                    <MobilLink href="#solucion" data-scroll="solucion">
+                        Nuestra Solución
+                    </MobilLink>
+                </li>
+                <li>
+                    <MobilLink href="#biofertilizantes" data-scroll="biofertilizantes">
+                        ¿Qué son los biofertilizantes?
+                    </MobilLink>
+                </li>
+            </>
+        ) : (
+            <>
+                <li>
+                    <MobilLink href="/#contacto">Diagnóstico Gratuito</MobilLink>
+                </li>
+                <li>
+                    <MobilLink href="/#problema">El Problema</MobilLink>
+                </li>
+                <li>
+                    <MobilLink href="/#solucion">Nuestra Solución</MobilLink>
+                </li>
+                <li>
+                    <MobilLink href="/#biofertilizantes">¿Qué son los biofertilizantes?</MobilLink>
+                </li>
+            </>
+        )}
+        
+        <li>
+            <MobilLink href="#">Blog</MobilLink>
+        </li>
+    </ul>
+
+    <div class="mobile-cta-area">
+        <a href="https://wa.me/51918005466?text=Hola,%20quiero%20información"
+           class="btn-mobile-cta primary"
+           target="_blank" 
+           rel="noopener noreferrer"
+           id="whatsappMobileBtn">
+            💬 Hablar por WhatsApp
+        </a>
+        <a href="#"
+           class="btn-mobile-cta secondary"
+           id="diagnosticoMobileBtn">
+            🚀 Obtener mi Diagnóstico
+        </a>
+        <div class="mobile-contact-info">
+            <a href="tel:+51918005466">📞 +51 918 005 466</a>
+            <a href="mailto:bioecologicoeirl@gmail.com">✉️ bioecologicoeirl@gmail.com</a>
+        </div>
+    </div>
+</div>
+	<style>
+	  /*css del navbar*/
+	   /* WhatsApp Float Button */
+        .whatsapp-float {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: #25D366;
+            color: white;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 30px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            cursor: pointer;
+            z-index: 1000;
+            transition: all 0.3s ease;
+            text-decoration: none;
+        }
+        .whatsapp-float:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 20px rgba(37,211,102,0.5);
+        }
+    
+        @media (max-width: 768px) {
+            body { padding-top: 120px; }
+        }
+ 
+        @media (max-width: 600px) {
+            body { padding-top: 10px; }
+        }
+ 
+        /* ════════════════════════════
+           HEADER - LOGO RESPONSIVE
+           ════════════════════════════ */
+        
+        .site-header-top {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 999999;
+            background: #ffffff;
+            border-bottom: 1px solid rgba(37, 65, 34, 0.12);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 12px 1.5rem;
+        }
+ 
+        .site-header-top a {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            width: 100%;
+            max-width: 100%;
+        }
+ 
+        .site-header-logo {
+            height: 150px;
+            width: auto;
+            max-width: 960px;
+            object-fit: contain;
+            display: block;
+            transition: all 0.3s ease;
+        }
+ 
+        /* Tablet (768px y menos) */
+        @media (max-width: 768px) {
+            .site-header-top {
+                min-height: 75px;
+                padding: 10px 1.5rem;
+            }
+            .site-header-logo {
+                height: 128px;
+                max-width: 640px;
+            }
+            
+        }
+ 
+        /* Mobile (600px y menos) */
+        @media (max-width: 600px) {
+            .site-header-top {
+                min-height: 65px;
+                padding: 8px 1rem;
+            }
+            .site-header-logo {
+                height: 96px;
+                max-width: 480px;
+            }
+        }
+ 
+        /* Mobile pequeño (480px y menos) */
+        @media (max-width: 480px) {
+            .site-header-top {
+                min-height: 60px;
+                padding: 6px 0.75rem;
+            }
+            .site-header-logo {
+                height: 80px;
+                max-width: 400px;
+            }
+        }
+ 
+        /* ════════════════════════════
+           NAVBAR
+           ════════════════════════════ */
+ 
+        .site-navbar {
+            position: relative;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 9991;
+            background: rgba(37, 65, 34, 0.97);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-bottom: 3px solid var(--secundario-amarillo);
+            transition: box-shadow 0.3s ease;
+        }
+ 
+        .site-navbar.scrolled {
+            box-shadow: 0 4px 24px rgba(0, 0, 0, 0.3);
+        }
+ 
+          @media (max-width: 768px) {
+            .site-navbar { 
+                top: 150px;
+                position: fixed;
+             }
+        }
+        @media (max-width: 600px) {
+            .site-navbar { 
+                top: 111px;
+                position: fixed;
+             }
+        }
+ 
+           @media (max-width: 480px) {
+            .site-navbar { 
+                top: 94px;
+                position: fixed;
+             }
+        }
+ 
+        .navbar-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1.5rem;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+        }
+ 
+        /* Desktop Links */
+        .navbar-links {
+            display: flex;
+            align-items: center;
+            gap: 0.1rem;
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            flex: 1;
+            justify-content: center;
+        }
+ 
+        .navbar-links a {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            padding: 0.4rem 0.9rem;
+            color: rgba(255, 255, 255, 0.88);
+            text-decoration: none;
+            font-size: 1.2rem;
+            font-weight: 600;
+            border-radius: 6px;
+            transition: color 0.2s, background 0.2s;
+            white-space: nowrap;
+            letter-spacing: 0.01em;
+        }
+ 
+        .navbar-links a:hover {
+            color: var(--secundario-amarillo);
+            background: rgba(255, 255, 255, 0.08);
+        }
+ 
+        /* WhatsApp CTA Desktop */
+        .navbar-cta {
+            display: flex;
+            align-items: center;
+            flex-shrink: 0;
+        }
+ 
+        .btn-nav-cta {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: var(--secundario-amarillo);
+            color: var(--secundario-marron) !important;
+            padding: 0.42rem 1.1rem;
+            border-radius: 20px;
+            font-weight: 700;
+            font-size: 0.82rem;
+            text-decoration: none;
+            white-space: nowrap;
+            transition: opacity 0.2s, transform 0.15s;
+            border: none;
+            cursor: pointer;
+        }
+ 
+        .btn-nav-cta:hover {
+            opacity: 0.88;
+            transform: translateY(-1px);
+        }
+ 
+        /* Hamburger Button */
+        .navbar-hamburger {
+            display: none;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 5px;
+            width: 40px;
+            height: 40px;
+            border: 2px solid rgba(255, 255, 255, 0.25);
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 8px;
+            cursor: pointer;
+            padding: 0;
+            flex-shrink: 0;
+            transition: background 0.2s, border-color 0.2s;
+        }
+ 
+        .navbar-hamburger:hover {
+            background: rgba(255, 255, 255, 0.15);
+            border-color: rgba(233, 189, 21, 0.6);
+        }
+ 
+        .navbar-hamburger span {
+            display: block;
+            width: 20px;
+            height: 2px;
+            background: #ffffff;
+            border-radius: 2px;
+            transition: transform 0.35s cubic-bezier(.4,0,.2,1),
+                        opacity   0.25s ease,
+                        width     0.3s  ease;
+        }
+ 
+        .navbar-hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+        .navbar-hamburger.open span:nth-child(2) { opacity: 0; width: 0; }
+        .navbar-hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+ 
+        /* Mobile Menu */
+        .navbar-mobile-menu {
+            display: none;
+            position: fixed;
+            top: 130px;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            z-index: 9985;
+            background: rgba(30, 54, 28, 0.99);
+            flex-direction: column;
+            padding: 1.2rem 1.5rem 2.5rem;
+            overflow-y: auto;
+            transform: translateX(100%);
+            transition: transform 0.38s cubic-bezier(.4,0,.2,1);
+        }
+ 
+        .navbar-mobile-menu.open {
+            transform: translateX(0);
+        }
+ 
+        @media (max-width: 600px) {
+            .navbar-mobile-menu { top: 130px; }
+        }
+
+          @media (min-width: 601px) {
+            .navbar-mobile-menu { top: 170px; }
+        }
+ 
+        .mobile-links {
+            list-style: none;
+            padding: 0;
+            margin: 0 0 1.5rem;
+            flex: 1;
+        }
+ 
+        .mobile-links li {
+            border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+        }
+ 
+        .mobile-links a {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 1rem 0.4rem;
+            color: rgba(255, 255, 255, 0.88);
+            text-decoration: none;
+            font-size: 1.05rem;
+            font-weight: 600;
+            transition: color 0.2s, padding-left 0.2s;
+        }
+ 
+        .mobile-links a:hover {
+            color: var(--secundario-amarillo);
+            padding-left: 0.8rem;
+        }
+ 
+        .mobile-links .m-icon {
+            width: 40px;
+            height: 40px;
+            background: rgba(233, 189, 21, 0.1);
+            border: 1px solid rgba(233, 189, 21, 0.25);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 19px;
+            flex-shrink: 0;
+        }
+ 
+        .mobile-cta-area {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+ 
+        .btn-mobile-cta {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 0.9rem 1rem;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 700;
+            text-decoration: none;
+            border: none;
+            cursor: pointer;
+            transition: opacity 0.2s, transform 0.15s;
+        }
+ 
+        .btn-mobile-cta:hover { 
+            opacity: 0.88; 
+            transform: translateY(-1px); 
+        }
+ 
+        .btn-mobile-cta.primary {
+            background: var(--secundario-amarillo);
+            color: var(--secundario-marron);
+        }
+ 
+        .btn-mobile-cta.secondary {
+            background: rgba(255, 255, 255, 0.08);
+            color: #ffffff;
+            border: 1px solid rgba(255, 255, 255, 0.18);
+        }
+ 
+        .mobile-contact-info {
+            margin-top: 1.2rem;
+            padding-top: 1.2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+ 
+        .mobile-contact-info a {
+            color: rgba(255, 255, 255, 0.55);
+            text-decoration: none;
+            font-size: 0.88rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: color 0.2s;
+        }
+ 
+        .mobile-contact-info a:hover { 
+            color: var(--secundario-amarillo); 
+        }
+ 
+        /* Desktop vs Mobile */
+        @media (max-width: 860px) {
+            .navbar-links,
+            .navbar-cta { display: none !important; }
+            .navbar-hamburger { display: flex; }
+            .navbar-mobile-menu { display: flex; }
+        }
+</style>
+<script>
+    
+    // Helper tipado
+    function getElement<T extends HTMLElement>(id: string): T {
+        const el = document.getElementById(id);
+        if (!el) throw new Error(`Element #${id} not found`);
+        return el as T;
+    }
+
+    (function () {
+        // Elementos con tipado fuerte
+        const btn = getElement<HTMLElement>('hamburgerBtn');
+        const menu = getElement<HTMLElement>('mobileMenu');
+        const navbar = getElement<HTMLElement>('mainNavbar');
+
+        let menuOpen = false;
+
+        function openMobileMenu(): void {
+            menuOpen = true;
+            btn.classList.add('open');
+            menu.classList.add('open');
+            btn.setAttribute('aria-expanded', 'true');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeMobileMenu(): void {
+            menuOpen = false;
+            btn.classList.remove('open');
+            menu.classList.remove('open');
+            btn.setAttribute('aria-expanded', 'false');
+            document.body.style.overflow = '';
+        }
+
+        // Exponer globalmente
+        (window as any).closeMobileMenu = closeMobileMenu;
+
+        btn.addEventListener('click', () => {
+            menuOpen ? closeMobileMenu() : openMobileMenu();
+        });
+
+        document.addEventListener('keydown', (e: KeyboardEvent) => {
+            if (e.key === 'Escape' && menuOpen) closeMobileMenu();
+        });
+
+        window.addEventListener('scroll', () => {
+            navbar.classList.toggle('scrolled', window.scrollY > 40);
+        }, { passive: true });
+
+        // Smooth scroll para links con data-scroll
+        document.querySelectorAll<HTMLElement>('a[data-scroll]').forEach(link => {
+            link.addEventListener('click', (e: MouseEvent) => {
+                e.preventDefault();
+                const targetId = link.getAttribute('data-scroll');
+                if (!targetId) return;
+
+                const el = document.getElementById(targetId);
+                if (!el) return;
+
+                const offset = 310;
+                const top = el.getBoundingClientRect().top + window.scrollY - offset;
+                window.scrollTo({ top, behavior: 'smooth' });
+                closeMobileMenu();
+                  
+            });
+        });
+
+        // Logo scroll to top
+        const logoLink = document.getElementById('logoLink');
+        logoLink?.addEventListener('click', (e: MouseEvent) => {
+            e.preventDefault();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+
+        // Botón diagnóstico móvil
+        const diagnosticoBtn = document.getElementById('diagnosticoMobileBtn');
+        diagnosticoBtn?.addEventListener('click', (e: MouseEvent) => {
+            e.preventDefault();
+            closeMobileMenu();
+            const el = document.getElementById('seccion1') || document.getElementById('contacto');
+            if (!el) return;
+            const offset = 310;
+            const top = el.getBoundingClientRect().top + window.scrollY - offset;
+            window.scrollTo({ top, behavior: 'smooth' });
+        });
+
+        // WhatsApp móvil cierra menú antes de navegar
+        const whatsappBtn = document.getElementById('whatsappMobileBtn');
+        whatsappBtn?.addEventListener('click', () => {
+            closeMobileMenu();
+        });
+    })();
+ 
+    
+</script>

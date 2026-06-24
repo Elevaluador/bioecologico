@@ -1,0 +1,193 @@
+---
+import BaseHead from '../components/BaseHead.astro';
+import Footer from '../components/Footer.astro';
+import Header from '../components/Header.astro';
+import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
+export const prerender = true;
+---
+
+<!doctype html>
+<html lang="es">
+	<head>
+		<BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
+	<!-- Cargar Supabase SDK antes que cualquier otro script -->
+    <style>
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+      
+        @media (max-width: 768px) { body { padding-top: 120px; } }
+        @media (max-width: 600px) { body { padding-top: 10px; } }
+
+        /* HERO BANNER */
+        .page-hero {
+            background:var(--primario-morado);
+            padding: 10rem 2rem;
+            color: var(--blanco);
+            text-align: center;
+        }
+        .page-hero h1 { font-size: 2.8rem; font-weight: 800; margin-bottom: 1rem; }
+        .page-hero p { font-size: 1.1rem; opacity: 0.9; max-width: 600px; margin: 0 auto; }
+        .breadcrumb { font-size: 0.9rem; margin-bottom: 1rem; opacity: 0.75; }
+        .breadcrumb a { color: var(--secundario-amarillo); text-decoration: none; }
+
+        .last-update {
+            background: var(--secundario-amarillo);
+            color: black;
+            padding: 0.8rem 1.2rem;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        /* CONTENIDO */
+        .page-content { max-width: 900px; margin: 0 auto; padding: 3rem 2rem; }
+
+        .section-block {
+            background: white;
+            border-radius: 15px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.07);
+            border-left: 5px solid var(--primario-morado);
+        }
+        .section-block h2 {
+            color: var(--primario-verde);
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            font-weight: 700;
+            display: flex; align-items: center; gap: 10px;
+        }
+        .section-block h3 { color: var(--primario-morado); font-size: 1.1rem; margin: 1.2rem 0 0.5rem; }
+        .section-block p { color: #555; line-height: 1.8; margin-bottom: 0.8rem; }
+        .section-block ul { padding-left: 1.5rem; color: #555; line-height: 1.9; }
+        .section-block ul li { margin-bottom: 0.4rem; }
+
+        /* TABLA DE COOKIES */
+        .cookie-table { width: 100%; border-collapse: collapse; margin: 1rem 0; font-size: 0.9rem; }
+        .cookie-table th { background: var(--secundario-marron); color: white; padding: 0.8rem 1rem; text-align: left; }
+        .cookie-table td { padding: 0.75rem 1rem; border-bottom: 1px solid #e0e0e0; color: #555; vertical-align: top; }
+        .cookie-table tr:nth-child(even) { background: #f8f9fa; }
+        .cookie-table tr:hover { background: #e8f5e9; }
+        @media (max-width: 600px) { .cookie-table { display: block; overflow-x: auto; } }
+
+        /* BADGE TIPO */
+        .badge {
+            display: inline-block; padding: 0.25rem 0.7rem;
+            border-radius: 20px; font-size: 0.78rem; font-weight: 700;
+        }
+        .badge-necessary { background: #e8f5e9; color: #2e7d32; }
+        .badge-analytics { background: #e3f2fd; color: #1565c0; }
+        .badge-marketing { background: #fff3e0; color: #e65100; }
+
+    </style>
+<body>
+		<Header />
+	<main>
+        <section class="page-hero">
+    <p class="breadcrumb"><a href="/">Inicio</a> › Política de Cookies</p>
+    <h1>🍪 Política de Cookies</h1>
+    <p>Información transparente sobre cómo usamos las cookies en nuestro sitio web para mejorar tu experiencia.</p>
+       </section>
+        <!-- CONTENIDO -->
+<div class="page-content">
+
+    <div class="last-update">
+        📅 <strong>Última actualización:</strong> Junio 2026 &nbsp;|&nbsp; Esta política se aplica a todos los usuarios del sitio web de Bioecológico AgTech.
+    </div>
+
+    <section class="section-block">
+        <h2>🔍 ¿Qué son las Cookies?</h2>
+        <p>Las cookies son pequeños archivos de texto que los sitios web almacenan en tu dispositivo (computadora, teléfono o tablet) cuando los visitas. Sirven para recordar tus preferencias, analizar el uso del sitio y ofrecerte una experiencia más personalizada.</p>
+        <p>En Bioecológico AgTech usamos cookies de forma responsable, con el único objetivo de mejorar nuestro servicio y atenderte mejor como agricultor.</p>
+    </section>
+
+    <section class="section-block">
+        <h2>📋 Tipos de Cookies que Usamos</h2>
+
+        <h3>1. Cookies Estrictamente Necesarias</h3>
+        <p>Son indispensables para el funcionamiento básico del sitio. Sin ellas, el formulario de diagnóstico y la navegación no funcionarían correctamente.</p>
+
+        <h3>2. Cookies de Rendimiento y Analítica</h3>
+        <p>Nos ayudan a entender cómo los agricultores interactúan con nuestro sitio, qué secciones visitan más y cómo llegaron a nosotros. Esta información la usamos para mejorar el contenido.</p>
+
+        <h3>3. Cookies de Funcionalidad</h3>
+        <p>Recuerdan tus preferencias y datos ingresados en el formulario de diagnóstico para que no tengas que repetirlos si regresas.</p>
+    </section>
+
+    <section class="section-block">
+        <h2>🗂️ Detalle de Cookies Utilizadas</h2>
+        <div style="overflow-x:auto;">
+            <table class="cookie-table">
+                <thead>
+                    <tr>
+                        <th>Nombre</th>
+                        <th>Tipo</th>
+                        <th>Duración</th>
+                        <th>Finalidad</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>agtech_session</code></td>
+                        <td><span class="badge badge-necessary">Necesaria</span></td>
+                        <td>Sesión</td>
+                        <td>Mantiene activa la sesión del formulario de diagnóstico</td>
+                    </tr>
+                    <tr>
+                        <td><code>agtech_forms</code></td>
+                        <td><span class="badge badge-necessary">Necesaria</span></td>
+                        <td>30 días</td>
+                        <td>Guarda localmente los datos del formulario como respaldo</td>
+                    </tr>
+                    <tr>
+                        <td><code>_ga</code></td>
+                        <td><span class="badge badge-analytics">Analítica</span></td>
+                        <td>2 años</td>
+                        <td>Google Analytics – Identifica usuarios únicos</td>
+                    </tr>
+                    <tr>
+                        <td><code>_gid</code></td>
+                        <td><span class="badge badge-analytics">Analítica</span></td>
+                        <td>24 horas</td>
+                        <td>Google Analytics – Distingue sesiones</td>
+                    </tr>
+                    <tr>
+                        <td><code>cookie_consent</code></td>
+                        <td><span class="badge badge-necessary">Necesaria</span></td>
+                        <td>1 año</td>
+                        <td>Guarda tu preferencia sobre cookies</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <section class="section-block">
+        <h2>⚙️ ¿Cómo Controlar las Cookies?</h2>
+        <p>Puedes configurar tu navegador para aceptar, rechazar o eliminar cookies en cualquier momento. Aquí te indicamos cómo en los navegadores más comunes:</p>
+        <ul>
+            <li><strong>Google Chrome:</strong> Configuración › Privacidad y seguridad › Cookies</li>
+            <li><strong>Mozilla Firefox:</strong> Opciones › Privacidad y seguridad › Cookies</li>
+            <li><strong>Microsoft Edge:</strong> Configuración › Cookies y permisos del sitio</li>
+            <li><strong>Safari (iPhone/iPad):</strong> Ajustes › Safari › Privacidad y seguridad</li>
+        </ul>
+        <p style="margin-top:1rem;"><strong>Nota:</strong> Si deshabilitas las cookies necesarias, algunas funciones del formulario de diagnóstico podrían no funcionar correctamente.</p>
+    </section>
+
+    <section class="section-block">
+        <h2>📞 ¿Tienes Preguntas?</h2>
+        <p>Si tienes alguna consulta sobre el uso de cookies en nuestro sitio, contáctanos directamente:</p>
+        <ul>
+            <li>📱 WhatsApp: <a href="https://wa.me/51918005466" target="_blank" style="color:var(--primario-morado);">+51 918 005 466</a></li>
+            <li>✉️ Email: <a href="mailto:bioecologicoeirl@gmail.com" style="color:var(--primario-morado);">bioecologicoeirl@gmail.com</a></li>
+            <li>📍 Sullana, Piura, Perú</li>
+        </ul>
+    </section>
+
+</div>
+
+    </main>
+		<Footer />
+</body>
+</html>

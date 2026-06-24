@@ -1,0 +1,32 @@
+---
+interface Props {
+    date: string | Date;
+}
+
+const { date } = Astro.props;
+
+let parsedDate: Date;
+let formattedDate: string = 'Fecha no disponible';
+
+try {
+    parsedDate = date instanceof Date ? date : new Date(date);
+    
+    // Verifica que sea una fecha válida
+    if (isNaN(parsedDate.getTime())) {
+        throw new Error('Invalid date');
+    }
+    
+    formattedDate = parsedDate.toLocaleDateString('es-ES', {
+        year: 'numeric',
+        month: 'short',
+        day: 'numeric',
+    });
+} catch (e) {
+    parsedDate = new Date(); // fallback a hoy, o deja vacío
+    console.error('Error parsing date:', date);
+}
+---
+
+<time datetime={isNaN(parsedDate.getTime()) ? '' : parsedDate.toISOString()}>
+    {formattedDate}
+</time>
