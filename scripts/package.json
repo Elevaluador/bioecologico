@@ -1,0 +1,25 @@
+{
+  "name": "bioecologico-auto-blog",
+  "version": "1.0.0",
+  "description": "Automatización de blog agrícola - Bioecológico AgTech",
+  "type": "module",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "nodemon index.js",
+    "test": "node index.js --test"
+  },
+  "dependencies": {
+    "@google/generative-ai": "^0.7.0",
+    "axios": "^1.7.0",
+    "date-fns": "^3.0.0",
+    "dotenv": "^16.6.1",
+    "nodemailer": "^6.9.0",
+    "octokit": "^3.1.0",
+    "openai": "^6.45.0",
+    "rss-parser": "^3.13.0",
+    "sharp": "^0.33.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.0"
+  }
+}
