@@ -1,6 +1,7 @@
 ---
 // FormularioAgTech.astro
 // No hay lógica de servidor necesaria aquí, todo es cliente
+
 ---
 <style>
   /* =============================================
@@ -1297,6 +1298,10 @@ document.addEventListener('DOMContentLoaded', () => {
   form.addEventListener('submit', async (e: SubmitEvent) => {
     e.preventDefault();
 
+    // ← AÑADE ESTOS LOGS
+    console.log('=== SUBMIT DISPARADO ===');
+    console.log('Formulario válido:', form.checkValidity());
+
     const submitButton = form.querySelector('.submit-button') as HTMLButtonElement;
     const originalText = submitButton.textContent || 'Enviar';
     submitButton.textContent = 'Enviando... ⏳';
@@ -1308,6 +1313,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const cultivo = getSelect('cultivo').value;
       const hectareas = getSelect('hectareas').value;
       const gastoMensual = parseInt(getSelect('gasto_mensual').value) || 0;
+        console.log('Cultivo:', cultivo, 'Hectareas:', hectareas, 'Gasto:', gastoMensual); // ← LOG
 
       const cultivoInfo = cultivoData[cultivo] || { ahorroPotencial: 30 };
       const ahorroEstimado = gastoMensual * 12 * (cultivoInfo.ahorroPotencial / 100);
@@ -1328,14 +1334,19 @@ document.addEventListener('DOMContentLoaded', () => {
         estado: 'nuevo'
       };
 
+       console.log('FormData preparado:', formData); // ← LOG
+        console.log('Enviando a /api/diagnostico...'); // ← LOG
+  console.log('Payload:', JSON.stringify(formData));
       const response = await fetch('/api/diagnostico', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formData)
       });
-
+      console.log('=== FETCH RESPONDIDO ===');
+    console.log('Status:', response.status);
+    console.log('OK:', response.ok);
       const result = await response.json();
-
+ console.log('Result:', result); // ← LOG
       if (!response.ok) {
         if (response.status === 409) {
           mostrarMensaje('⚠️ Ya existe un diagnóstico registrado para este teléfono y cultivo. Nuestro equipo técnico revisará la información y se comunicará contigo.', 'warning');

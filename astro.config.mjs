@@ -1,25 +1,24 @@
-// @ts-check
+// astro.config.mjs
 import mdx from '@astrojs/mdx';
 import sitemap from '@astrojs/sitemap';
 import netlify from '@astrojs/netlify';
 import { defineConfig, fontProviders } from 'astro/config';
 
-// https://astro.build/config
 export default defineConfig({
     prefetch: {
         prefetchAll: true,
         defaultStrategy: 'viewport'
     },
     
-    output: 'server',
-    adapter: netlify(),
+    output: 'server',        // ← CAMBIA esto
+    adapter: netlify(),      // ← AHORA sí tiene sentido
     
     site: 'https://www.bioecologico.online',
     
     integrations: [
         mdx(), 
         sitemap({
-            filter: (page) => !page.includes('/blog/'),  // ← Excluye blog del sitemap
+            filter: (page) => !page.includes('/blog/'),
         }),
     ],
     

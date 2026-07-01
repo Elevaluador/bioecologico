@@ -1,14 +1,36 @@
 ---
-import { Image } from 'astro:assets';
+import { Image } from 'astro:assets'; 
 import type { CollectionEntry } from 'astro:content';
 import BaseHead from '../components/BaseHead.astro';
+import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import FormattedDate from '../components/FormattedDate.astro';
-import Header from '../components/Header.astro';
 
 type Props = CollectionEntry<'blog'>['data'];
 
-const { title, description, pubDate, updatedDate, heroImage } = Astro.props;
+const { title, tags, author, description, pubDate, updatedDate, heroImage } = Astro.props;
+
+// Defensa: asegurar que pubDate sea Date válido
+const fecha = pubDate instanceof Date && !isNaN(pubDate.getTime()) 
+  ? pubDate 
+  : new Date(pubDate);
+
+const fechaFormateada = isNaN(fecha.getTime()) 
+  ? 'Fecha no disponible' 
+  : fecha.toLocaleDateString('es-ES', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric'
+    });
+
+// Igual para updatedDate
+const fechaActualizacion = updatedDate instanceof Date && !isNaN(updatedDate.getTime())
+  ? updatedDate.toLocaleDateString('es-ES', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric'
+    })
+  : null;
 ---
 
 <html lang="es">

@@ -1,0 +1,86 @@
+---
+import { Image } from 'astro:assets';
+import { getCollection } from 'astro:content';
+import BaseHead from '../../components/BaseHead.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import FormattedDate from '../../components/FormattedDate.astro';
+
+const posts = (await getCollection('tendencias')).sort(
+  (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
+);
+
+const postsPorCategoria = posts.reduce((acc, post) => {
+  const cat = post.data.categoria;
+  if (!acc[cat]) acc[cat] = [];
+  acc[cat].push(post);
+  return acc;
+}, {} as Record<string, typeof posts>);
+
+const categorias = [
+  { slug: 'mercado', nombre: 'Mercado', descripcion: 'Análisis de mercado agrícola' },
+  { slug: 'innovacion-y-tecnologia', nombre: 'Innovación y Tecnología', descripcion: 'Nuevas tecnologías en agricultura' },
+  { slug: 'eventos', nombre: 'Eventos', descripcion: 'Ferias, congresos y encuentros' },
+  { slug: 'sostenibilidad', nombre: 'Sostenibilidad', descripcion: 'Prácticas eco-amigables' },
+  { slug: 'casos-de-exito', nombre: 'Casos de Éxito', descripcion: 'Historias inspiradoras' },
+];
+export const prerender = true;  // ← AÑADE ESTO
+---
+
+<!doctype html>
+<html lang="es">
+  <head>
+    <BaseHead title="Tendencias | Bioecológico" description="Descubre las últimas tendencias en agricultura ecológica" />
+    <style>
+      main { width: 1200px; max-width: calc(100% - 2em); margin: auto; padding: 3em 1em; }
+      .categorias-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem; margin-bottom: 3rem; }
+      .categoria-card { border: 1px solid rgb(var(--gray)); border-radius: 12px; padding: 1.5rem; text-decoration: none; transition: box-shadow 0.2s ease; }
+      .categoria-card:hover { box-shadow: var(--box-shadow); }
+      .categoria-card h3 { margin: 0 0 0.5rem 0; color: rgb(var(--black)); }
+      .categoria-card p { margin: 0; color: rgb(var(--gray)); font-size: 0.9rem; }
+      .categoria-card span { display: block; margin-top: 0.5rem; font-size: 0.8rem; color: rgb(var(--accent)); }
+      ul { display: flex; flex-wrap: wrap; gap: 2rem; list-style-type: none; margin: 0; padding: 0; }
+      ul li { width: calc(50% - 1rem); }
+      ul li img { margin-bottom: 0.5rem; border-radius: 12px; }
+      @media (max-width: 720px) { ul li { width: 100%; } }
+    </style>
+  </head>
+  <body>
+    <Header />
+    <main>
+      <h1>Tendencias</h1>
+      <p>Explora las últimas tendencias en agricultura ecológica</p>
+
+      <section>
+        <h2>Categorías</h2>
+        <div class="categorias-grid">
+          {categorias.map(cat => (
+            <a href={`/tendencias/${cat.slug}/`} class="categoria-card">
+              <h3>{cat.nombre}</h3>
+              <p>{cat.descripcion}</p>
+              <span>{(postsPorCategoria[cat.slug] || []).length} artículos</span>
+            </a>
+          ))}
+        </div>
+      </section>
+
+      <section>
+        <h2>Últimos artículos</h2>
+        <ul>
+          {posts.map((post) => (
+            <li>
+              <a href={`/tendencias/${post.data.categoria}/${post.id}/`}>
+                {post.data.heroImage && (
+                  <Image width={720} height={360} src={post.data.heroImage} alt="" />
+                )}
+                <h4 class="title">{post.data.title}</h4>
+                <p class="date"><FormattedDate date={post.data.pubDate} /></p>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </section>
+    </main>
+    <Footer />
+  </body>
+</html>

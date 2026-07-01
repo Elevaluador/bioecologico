@@ -1,3 +1,6 @@
+---
+import HeaderLink from './HeaderLink.astro';
+---
 <style>
 /* Estilos básicos para el banner y el panel de configuración */
  #consent-banner, #consent-config {
@@ -39,9 +42,9 @@
     Usamos cookies para análisis estadístico y publicidad. ¿Cómo deseas continuar?
   </p>
   <p style="margin-top:1rem; font-size:0.85rem; opacity:0.8;">
-    <a style="color:var(--blanco);"<HeaderLink href=/politica-cookies>Política de Cookies</HeaderLink></a> &nbsp;|&nbsp;
-    <a style="color:var(--blanco);"<HeaderLink href=/politica-privacidad>Política de Privacidad</HeaderLink></a> &nbsp;|&nbsp;
-    
+   <HeaderLink href="/politica-cookies" style="color:var(--blanco);">Política de Cookies</HeaderLink> &nbsp;|&nbsp;
+   <HeaderLink href="/politica-privacidad" style="color:var(--blanco);">Política de Privacidad</HeaderLink> &nbsp;|&nbsp;
+
 
   </p>
   <button type="button" data-action="aceptar-todo">Aceptar</button>

@@ -1,0 +1,72 @@
+---
+import { getCollection, render } from 'astro:content';
+import BaseHead from '../../../components/BaseHead.astro';
+import Header from '../../../components/Header.astro';
+import Footer from '../../../components/Footer.astro';
+import FormattedDate from '../../../components/FormattedDate.astro';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('tendencias');
+  
+  return posts.map(post => ({
+    params: { 
+      categoria: post.data.categoria,
+      slug: post.id 
+    },
+    props: { post },
+  }));
+}
+
+const { post } = Astro.props;
+const { Content } = await render(post);
+
+const nombresCategorias: Record<string, string> = {
+  mercado: 'Mercado',
+  'innovacion-y-tecnologia': 'Innovación y Tecnología',
+  eventos: 'Eventos',
+  sostenibilidad: 'Sostenibilidad',
+  'casos-de-exito': 'Casos de Éxito',
+};
+
+export const prerender = true;  // ← AÑADE ESTO
+---
+
+<html lang="es">
+  <head>
+    <BaseHead title={post.data.title} description={post.data.description} />
+    <style>
+      main { width: 720px; max-width: calc(100% - 2em); margin: auto; padding: 3em 1em; }
+      .hero-image img { width: 100%; border-radius: 12px; margin-bottom: 1em; }
+      .meta { color: rgb(var(--gray)); margin-bottom: 2em; }
+      .meta a { color: rgb(var(--accent)); text-decoration: none; }
+    </style>
+  </head>
+  <body>
+    <Header />
+    <main>
+      <article>
+       <!--  <h1>{post.data.title}</h1>
+        {post.data.heroImage && (
+          <div class="hero-image">
+            <img src={post.data.heroImage.src} alt="" />
+          </div>
+        )}
+      -->
+        <div class="meta">
+          <a href={`/tendencias/${post.data.categoria}/`}>
+            {nombresCategorias[post.data.categoria] || post.data.categoria}
+          </a>
+          {' · '}
+          <FormattedDate date={post.data.pubDate} />
+          {post.data.updatedDate && (
+            <span> · Actualizado: <FormattedDate date={post.data.updatedDate} /></span>
+          )}
+        </div>
+        
+        <Content />
+      </article>
+    </main>
+    <Footer />
+  </body>
+</html>
+

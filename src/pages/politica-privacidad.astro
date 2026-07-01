@@ -11,7 +11,7 @@ export const prerender = true;
 	<head>
 		<BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
 	<!-- Cargar Supabase SDK antes que cualquier otro script -->
-<body>
+
 	<style>
     
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -46,12 +46,13 @@ export const prerender = true;
 
         .last-update { background: #fff8e1; border-left: 4px solid var(--secundario-amarillo); padding: 1rem 1.5rem; border-radius: 8px; font-size: 0.9rem; color: #555; margin-bottom: 2rem; }
     </style>
-</body>
+</head>
+<body>
 		<Header />
 	<main>
 	<!-- HERO -->
 <section class="page-hero">
-    <p class="breadcrumb"><a <HeaderLink href="/">Inicio</HeaderLink></a> › Política de Privacidad</p>
+    <p class="breadcrumb"><a href="/">Inicio</a> › Política de Privacidad</p>
     <h1>🔒 Política de Privacidad</h1>
     <p>Nos tomamos muy en serio la protección de tus datos personales. Aquí te explicamos cómo los usamos y protegemos.</p>
 </section>

@@ -1,5 +1,5 @@
 ---
-import { Image } from 'astro:assets';
+/*import { Image } from 'astro:assets';
 import { getCollection } from 'astro:content';
 import BaseHead from '../../components/BaseHead.astro';
 import Footer from '../../components/Footer.astro';
@@ -10,10 +10,11 @@ import { SITE_DESCRIPTION, SITE_TITLE } from '../../consts';
 
 const posts = (await getCollection('blog')).sort(
 	(a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
-);
- //Redirige a home mientras el blog no está listo*/
-//return Astro.redirect('/');
+);*/
+
+
 ---
+<!-- 
 <!doctype html>
 <html lang="es">
 	<head>
@@ -119,3 +120,4 @@ const posts = (await getCollection('blog')).sort(
 		<Footer />
 	</body>
 </html>
+-->

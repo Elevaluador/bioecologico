@@ -1,12 +1,16 @@
 // src/pages/api/diagnostico.ts
 export const prerender = false;
 import type { APIRoute } from 'astro';
+// Log inmediato al cargar el archivo
+console.log('=== DIAGNOSTICO.TS CARGADO y listo===');
 import { supabase } from '../../lib/supabase.server';
+
+
 
 export const POST: APIRoute = async ({ request }) => {
   try {
     const rawBody = await request.text();
-    
+    console.log('=== POST RECIBIDO ===');
     console.log('Raw body:', rawBody);
 
     if (!rawBody || rawBody.trim() === '') {

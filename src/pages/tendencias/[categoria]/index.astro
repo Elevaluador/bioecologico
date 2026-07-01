@@ -1,0 +1,85 @@
+---
+import { Image } from 'astro:assets';
+import { getCollection } from 'astro:content';
+import BaseHead from '../../../components/BaseHead.astro';
+import Header from '../../../components/Header.astro';
+import Footer from '../../../components/Footer.astro';
+import FormattedDate from '../../../components/FormattedDate.astro';
+
+export async function getStaticPaths() {
+  const categoriasPermitidas = [
+    'mercado',
+    'innovacion-y-tecnologia',
+    'eventos',
+    'sostenibilidad',
+    'casos-de-exito',
+  ];
+  
+  const todosLosPosts = await getCollection('tendencias');
+  
+  return categoriasPermitidas.map(cat => {
+    const postsFiltrados = todosLosPosts.filter(post => 
+      post.data.categoria === cat
+    );
+    
+    return {
+      params: { categoria: cat },
+      props: { posts: postsFiltrados, categoria: cat },
+    };
+  });
+}
+
+const { categoria } = Astro.params;
+const { posts } = Astro.props;
+
+const nombresCategorias: Record<string, string> = {
+  mercado: 'Mercado',
+  'innovacion-y-tecnologia': 'Innovación y Tecnología',
+  eventos: 'Eventos',
+  sostenibilidad: 'Sostenibilidad',
+  'casos-de-exito': 'Casos de Éxito',
+};
+
+const nombreBonito = nombresCategorias[categoria] || categoria;
+export const prerender = true;  // ← AÑADE ESTO
+---
+
+<!doctype html>
+<html lang="es">
+  <head>
+    <BaseHead title={`${nombreBonito} | Tendencias`} description={`Artículos sobre ${nombreBonito}`} />
+    <style>
+      main { width: 1200px; max-width: calc(100% - 2em); margin: auto; padding: 3em 1em; }
+      ul { display: flex; flex-wrap: wrap; gap: 2rem; list-style-type: none; margin: 0; padding: 0; }
+      ul li { width: calc(50% - 1rem); }
+      ul li img { margin-bottom: 0.5rem; border-radius: 12px; }
+      @media (max-width: 720px) { ul li { width: 100%; } }
+    </style>
+  </head>
+  <body>
+    <Header />
+    <main>
+      <h1>{nombreBonito}</h1>
+      <p>Artículos sobre {nombreBonito.toLowerCase()}</p>
+      
+      {posts.length > 0 ? (
+        <ul>
+          {posts.map((post) => (
+            <li>
+              <a href={`/tendencias/${categoria}/${post.id}/`}>
+                {post.data.heroImage && (
+                  <Image width={720} height={360} src={post.data.heroImage} alt="" />
+                )}
+                <h4 class="title">{post.data.title}</h4>
+                <p class="date"><FormattedDate date={post.data.pubDate} /></p>
+              </a>
+            </li>
+          ))}
+        </ul>
+      ) : (
+        <p>No hay artículos en esta categoría todavía.</p>
+      )}
+    </main>
+    <Footer />
+  </body>
+</html>
